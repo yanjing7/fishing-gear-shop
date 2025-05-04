@@ -809,7 +809,7 @@ class ProductManager {
         };
         
         // 点击模态框背景关闭
-        modal.onclick = (e) => {
+        modal.addEventListener('click', e => {
             if (e.target === modal) {
                 modal.classList.remove('active');
                 // 移除支付方式元素(如果存在)
@@ -818,7 +818,7 @@ class ProductManager {
                     paymentMethods.remove();
                 }
             }
-        };
+        });
     }
     
     // 显示支付页面
@@ -826,65 +826,32 @@ class ProductManager {
         // 计算价格
         const price = parseFloat(product.price).toFixed(2);
         
+        // 创建随机订单号
+        const orderId = `ORDER-${Math.floor(Math.random() * 1000000)}`;
+        
         // 创建支付页面模态框
         const modalHtml = `
             <div class="payment-page-modal modal active">
                 <div class="modal-content">
                     <span class="close-modal">&times;</span>
-                    <div class="payment-page-container">
-                        <div class="payment-header">
-                            <div class="payment-logo">
-                                <img src="img/logo.png" alt="程老板渔具" onerror="this.src='https://via.placeholder.com/60x60/4a7043/ffffff?text=程老板'">
-                                <h2>程老板渔具 野户外小店</h2>
-                            </div>
-                            <div class="payment-steps">
-                                <div class="step completed">
-                                    <span class="step-icon">✓</span>
-                                    <span class="step-text">选择商品</span>
-                                </div>
-                                <div class="step active">
-                                    <span class="step-icon">2</span>
-                                    <span class="step-text">支付</span>
-                                </div>
-                                <div class="step">
-                                    <span class="step-icon">3</span>
-                                    <span class="step-text">我的收货</span>
-                                </div>
-                            </div>
+                    <div class="container">
+                        <h2>付款金额</h2>
+                        <div class="price">¥${price}</div>
+                        <p class="tips">请在支付时备注订单号：<span id="orderId">${orderId}</span></p>
+                        <p class="timer">支付倒计时：<span id="timer">15:00</span></p>
+
+                        <div class="payment-method">
+                            <button id="wechatBtn" class="active">微信支付</button>
+                            <button id="alipayBtn" class="inactive">支付宝支付</button>
                         </div>
-                        
-                        <div class="payment-notice">
-                            <p>付款说明：</p>
-                            <p>拍拍请确保可以Disney+，不提供任何网络协助以及设备支付款项，商品为计量机软件数字化商品，虚拟产品有唯一一件不可回收件，拍拍不可退款，不同意勿拍</p>
-                            <p>您的订单已提交成功，请尽快完成支付</p>
+
+                        <div class="qrcode" id="qrcode">
+                            <!-- 默认显示微信收款码 -->
+                            <img src="img/wechat-qrcode.jpg" alt="微信收款二维码" width="200" onerror="this.src='https://via.placeholder.com/200x200/09bb07/ffffff?text=微信收款码'">
                         </div>
-                        
-                        <div class="payment-amount">
-                            <h2>¥${price}</h2>
-                        </div>
-                        
-                        <div class="payment-qrcode-container">
-                            <div class="qrcode-img">
-                                <img src="img/alipay-qrcode.jpg" alt="支付宝收款码" class="active payment-qr" data-type="alipay" onerror="this.src='https://via.placeholder.com/300x300/108ee9/ffffff?text=支付宝收款码'">
-                                <img src="img/wechat-qrcode.jpg" alt="微信收款码" class="payment-qr" data-type="wechat" onerror="this.src='https://via.placeholder.com/300x300/09bb07/ffffff?text=微信收款码'">
-                            </div>
-                            <div class="refresh-code">
-                                <span class="refresh-icon">⟳</span>
-                                <p>打开手机扫码支付</p>
-                                <p>扫一扫付款（元）</p>
-                            </div>
-                        </div>
-                        
-                        <div class="payment-methods-selector">
-                            <div class="payment-method-option active" data-type="alipay">
-                                <img src="img/alipay-icon.png" alt="支付宝" onerror="this.src='https://via.placeholder.com/40x40/108ee9/ffffff?text=支付宝'">
-                                <span>支付宝</span>
-                            </div>
-                            <div class="payment-method-option" data-type="wechat">
-                                <img src="img/wechat-icon.png" alt="微信支付" onerror="this.src='https://via.placeholder.com/40x40/09bb07/ffffff?text=微信'">
-                                <span>微信支付</span>
-                            </div>
-                        </div>
+                        <p class="tips">请使用对应应用扫描二维码，手动输入金额 ¥${price}</p>
+
+                        <button class="confirm-btn" id="confirmPaymentBtn">我已完成支付</button>
                     </div>
                 </div>
             </div>
@@ -898,47 +865,66 @@ class ProductManager {
         // 获取创建的元素
         const modal = document.querySelector('.payment-page-modal');
         const closeBtn = modal.querySelector('.close-modal');
-        const paymentOptions = modal.querySelectorAll('.payment-method-option');
-        const qrCodes = modal.querySelectorAll('.payment-qr');
+        const wechatBtn = document.getElementById('wechatBtn');
+        const alipayBtn = document.getElementById('alipayBtn');
+        const qrcodeDiv = document.getElementById('qrcode');
+        const confirmBtn = document.getElementById('confirmPaymentBtn');
+        const timerSpan = document.getElementById('timer');
         
-        // 切换支付方式
-        paymentOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                // 移除所有active类
-                paymentOptions.forEach(o => o.classList.remove('active'));
-                qrCodes.forEach(qr => qr.classList.remove('active'));
-                
-                // 添加active类到当前选中的选项
-                option.classList.add('active');
-                
-                // 显示对应的二维码
-                const type = option.dataset.type;
-                const qrCode = modal.querySelector(`.payment-qr[data-type="${type}"]`);
-                if (qrCode) {
-                    qrCode.classList.add('active');
-                }
-            });
+        // 支付方式切换
+        wechatBtn.addEventListener('click', () => {
+            wechatBtn.classList.remove('inactive');
+            wechatBtn.classList.add('active');
+            alipayBtn.classList.remove('active');
+            alipayBtn.classList.add('inactive');
+            qrcodeDiv.innerHTML = '<img src="img/wechat-qrcode.jpg" alt="微信收款二维码" width="200" onerror="this.src=\'https://via.placeholder.com/200x200/09bb07/ffffff?text=微信收款码\'">';
+        });
+
+        alipayBtn.addEventListener('click', () => {
+            alipayBtn.classList.remove('inactive');
+            alipayBtn.classList.add('active');
+            wechatBtn.classList.remove('active');
+            wechatBtn.classList.add('inactive');
+            qrcodeDiv.innerHTML = '<img src="img/alipay-qrcode.jpg" alt="支付宝收款二维码" width="200" onerror="this.src=\'https://via.placeholder.com/200x200/108ee9/ffffff?text=支付宝收款码\'">';
+        });
+        
+        // 支付倒计时（15分钟）
+        let timeLeft = 15 * 60; // 15分钟，单位：秒
+        const countdown = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerSpan.textContent = '已超时，请重新下单';
+                confirmBtn.disabled = true;
+                return;
+            }
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerSpan.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            timeLeft--;
+        }, 1000);
+        
+        // 确认支付
+        confirmBtn.addEventListener('click', () => {
+            if (confirm("您确认已完成支付吗？")) {
+                clearInterval(countdown);
+                this.showMessage("感谢您的支付！请等待管理员审核。", "success");
+                document.body.removeChild(modal);
+            }
         });
         
         // 关闭按钮
         closeBtn.addEventListener('click', () => {
+            clearInterval(countdown);
             document.body.removeChild(modal);
         });
         
         // 点击背景关闭
         modal.addEventListener('click', e => {
             if (e.target === modal) {
+                clearInterval(countdown);
                 document.body.removeChild(modal);
             }
         });
-        
-        // 刷新按钮功能
-        const refreshBtn = modal.querySelector('.refresh-icon');
-        if (refreshBtn) {
-            refreshBtn.addEventListener('click', () => {
-                this.showMessage('二维码已刷新', 'info');
-            });
-        }
     }
     
     // 保留阿里巴巴一键代发功能供后台使用

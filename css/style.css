@@ -2482,4 +2482,84 @@ h2::after {
 .payment-method-option.active {
     border-color: #2196f3;
     background-color: #e3f2fd;
+}
+
+/* 新增支付页面样式 */
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ff4500;
+    margin: 10px 0;
+}
+
+.tips {
+    color: #666;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+.payment-method {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.payment-method button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.payment-method .active {
+    background: #007bff;
+    color: #fff;
+}
+
+.payment-method .inactive {
+    background: #ddd;
+    color: #333;
+}
+
+.qrcode {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.qrcode img {
+    border: 2px solid #ddd;
+    border-radius: 5px;
+}
+
+.confirm-btn {
+    background: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.confirm-btn:hover {
+    background: #218838;
+}
+
+.timer {
+    font-size: 14px;
+    color: #ff4500;
+    margin: 10px 0;
 } 
