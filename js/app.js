@@ -934,7 +934,7 @@ class App {
         // 管理员功能
         this.adminCredentials = {
             username: 'admin',
-            password: 'fishing123'  // 实际应用中应使用更安全的方式存储和验证
+            password: 'cl123456'  // 实际应用中应使用更安全的方式存储和验证
         };
     }
     
