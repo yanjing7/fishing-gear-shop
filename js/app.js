@@ -6,7 +6,7 @@
 const CONFIG = {
     // 抖音用户ID，用于爬取橱窗商品
     // 在实际使用中替换为自己的抖音用户ID
-    douyinUserId: '你的抖音ID',
+    douyinUserId: 'chenglaobanl',
     
     // 本地存储键名
     localStorageKeys: {
