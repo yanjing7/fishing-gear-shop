@@ -1,0 +1,31 @@
+name: GitHub Pages部署
+
+on:
+  push:
+    branches:
+      - main  # 设置在主分支上推送时触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v3
+
+      - name: 设置Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      # 如果需要构建步骤，可以在这里添加
+      # - name: 安装依赖
+      #   run: npm ci
+      # - name: 构建项目
+      #   run: npm run build
+
+      - name: 部署到GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: .  # 指定要部署的文件夹，当前目录表示部署整个仓库
+          branch: gh-pages  # 部署到哪个分支
+          clean: true  # 部署前清理目标分支 

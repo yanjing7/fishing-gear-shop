@@ -1,0 +1,384 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="程老板渔具，专业野钓装备，适合运河岸伐钓黄辣丁、鲶鱼、鳗鱼，抖音橱窗购买筏竿、夜光漂等。">
+    <meta name="keywords" content="程老板渔具, 野钓, 运河, 岸伐钓鱼, 黄辣丁, 鲶鱼, 鳗鱼, 渔具, 抖音橱窗">
+    <title>程老板渔具 - 野钓运河</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Montserrat', 'Noto Sans SC', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f4f7f5;
+        }
+        header {
+            background: #2a4d69;
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #4a7043;
+        }
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        nav .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        nav .logo::before {
+            content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14.5c-3.59 0-6.5 2.91-6.5 6.5s2.91 6.5 6.5 6.5 6.5-2.91 6.5-6.5S15.59 5.5 12 5.5zm0 11c-2.48 0-4.5-2.02-4.5-4.5S9.52 7.5 12 7.5s4.5 2.02 4.5 4.5-2.02 4.5-4.5 4.5z"/></svg>');
+        }
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        nav ul li a:hover {
+            color: #4a7043;
+        }
+        .nav-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .hero {
+            height: 100vh;
+            background: url('https://via.placeholder.com/1920x1080?text=张家港运河野钓') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            text-shadow: 0 0 10px rgba(0,0,0,0.7);
+            position: relative;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 50px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100"><path fill="%234a7043" d="M0,50L48,60C96,70,192,90,288,85C384,80,480,60,576,50C672,40,768,40,864,45C960,50,1056,60,1152,65C1248,70,1344,70,1392,70L1440,70L1440,100L1392,100C1344,100,1248,100,1152,100C1056,100,960,100,864,100C768,100,672,100,576,100C480,100,384,100,288,100C192,100,96,100,48,100L0,100Z"></path></svg>') no-repeat center bottom;
+        }
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #4a7043;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 700;
+            border: 2px solid #2a4d69;
+        }
+        .btn:hover {
+            background: #386e3c;
+        }
+        section {
+            padding: 4rem 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #2a4d69;
+            position: relative;
+        }
+        h2::after {
+            content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="%234a7043"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>');
+            position: absolute;
+            bottom: -1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .product-card {
+            background: #e8f0fe;
+            border-radius: 10px;
+            overflow: hidden;
+            text-align: center;
+            padding: 1rem;
+            transition: transform 0.3s;
+            border: 1px solid #2a4d69;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 2px solid #4a7043;
+        }
+        .product-card h3 {
+            font-size: 1.2rem;
+            margin: 1rem 0 0.5rem;
+            color: #2a4d69;
+        }
+        .product-card p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .guide-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .guide-card {
+            background: #f4f7f5;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px dashed #4a7043;
+        }
+        .qrcode-section {
+            text-align: center;
+        }
+        .qrcode-section img {
+            max-width: 300px;
+            width: 100%;
+            margin: 1rem 0;
+        }
+        .qrcode-section p {
+            font-size: 1rem;
+            color: #666;
+        }
+        footer {
+            background: #2a4d69;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            position: relative;
+        }
+        footer::before {
+            content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100"><path fill="%23f4f7f5" d="M0,50L48,40C96,30,192,10,288,15C384,20,480,40,576,50C672,60,768,60,864,55C960,50,1056,40,1152,35C1248,30,1344,30,1392,30L1440,30L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>');
+            position: absolute;
+            top: -50px;
+            width: 100%;
+            height: 50px;
+        }
+        footer a {
+            color: #4a7043;
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: #2a4d69;
+                padding: 1rem 0;
+            }
+            nav ul.active {
+                display: flex;
+            }
+            .nav-toggle {
+                display: block;
+            }
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+            .hero-content p {
+                font-size: 1rem;
+            }
+            section {
+                padding: 2rem 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">程老板渔具</div>
+            <ul>
+                <li><a href="#home">首页</a></li>
+                <li><a href="#products">渔具</a></li>
+                <li><a href="#guide">野钓攻略</a></li>
+                <li><a href="#about">关于我们</a></li>
+                <li><a href="#contact">联系我们</a></li>
+            </ul>
+            <div class="nav-toggle">☰</div>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>程老板渔具 - 征服运河野钓</h1>
+            <p>专业野钓装备，助力张家港运河钓黄辣丁、鲶鱼、鳗鱼，抖音橱窗一键购买！</p>
+            <a href="https://www.douyin.com/user/MS4wLjABAAAA8jzJnzR9cQ-hFRhpzqISFcsDIS_B0gmsuX0OFLVy-mOXsfnOWkujToJ6JM8TmhJJ" class="btn" target="_blank">浏览抖音橱窗</a>
+        </div>
+    </section>
+
+    <section id="products">
+        <h2>野钓精选渔具</h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200?text=筏竿" alt="2.1米野钓筏竿">
+                <h3>2.1米野钓筏竿</h3>
+                <p>软调夜光竿稍，灵敏探黄辣丁轻口，坚韧抗鲶鱼拉力，运河必备。参考价：150-300元。</p>
+                <a href="https://www.douyin.com/product/placeholder_raft_rod" class="btn" target="_blank">抖音购买</a>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200?text=纺车轮" alt="1000型野钓纺车轮">
+                <h3>1000-2000型纺车轮</h3>
+                <p>4-6kg泄力，6+1轴承，夜钓顺滑，抗运河波浪干扰。参考价：80-150元。</p>
+                <a href="https://www.douyin.com/product/placeholder_spinning_reel" class="btn" target="_blank">抖音购买</a>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200?text=PE线" alt="0.8-1.2号PE线">
+                <h3>0.8-1.2号PE线</h3>
+                <p>8编高强度，耐磨抗桩基刮擦，适合运河野钓，100米。参考价：30-60元。</p>
+                <a href="https://www.douyin.com/product/placeholder_pe_line" class="btn" target="_blank">抖音购买</a>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200?text=鱼钩" alt="野钓鱼钩">
+                <h3>伊势尼/丸世鱼钩</h3>
+                <p>4-9号（黄辣丁/鲶鱼），8-10号（鳗鱼），锋利耐用，野钓利器。参考价：10-20元。</p>
+                <a href="https://www.douyin.com/product/placeholder_hooks" class="btn" target="_blank">抖音购买</a>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200?text=夜光漂" alt="野钓夜光漂">
+                <h3>夜光筏钓漂</h3>
+                <p>吃铅1-3克，高亮漂尾，抗运河波浪，夜钓黄辣丁、鳗鱼必备。参考价：20-40元。</p>
+                <a href="https://www.douyin.com/product/placeholder_night_float" class="btn" target="_blank">抖音购买</a>
+            </div>
+            <div class="product-card">
+                <img src="https://via.placeholder.com/250x200?text=饵料" alt="野钓饵料">
+                <h3>野钓活饵及窝料</h3>
+                <p>蚯蚓、鸡肝、酒米，引黄辣丁、鲶鱼、鳗鱼，运河鱼群聚集。参考价：20-50元。</p>
+                <a href="https://www.douyin.com/product/placeholder_baits" class="btn" target="_blank">抖音购买</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="guide">
+        <h2>运河野钓攻略</h2>
+        <div class="guide-grid">
+            <div class="guide-card">
+                <h3>最佳野钓点</h3>
+                <p>1. 码头边缘：1.5-2.5米深，桩基遮蔽，鱼群集中。<br>2. 下游桥墩：2-3米深，阴凉利鲶鱼、鳗鱼。<br>3. 上游弯道：缓流泥底，适黄辣丁、鳗鱼。</p>
+            </div>
+            <div class="guide-card">
+                <h3>应对轮船扰动</h3>
+                <p>夜钓20:00-3:00，避白天轮船高峰。轮船后等10-15分钟，抖竿诱鱼。8-12克铅坠，紧线抗波浪。</p>
+            </div>
+            <div class="guide-card">
+                <h3>野钓装备搭配</h3>
+                <p>黄辣丁：0.8号PE+1.0号子线+伊势尼4号钩+8克铅坠，调平水。<br>鲶鱼：1.2号PE+1.5号子线+伊势尼8号钩+10克铅坠，调2目。<br>鳗鱼：1.2号PE+2.0号子线+丸世8号钩，慢拖泥底。</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2>关于程老板渔具</h2>
+        <p>程老板渔具专注野钓装备，为张家港运河钓友提供高性价比筏竿、鱼轮、夜光漂等，助力夜钓黄辣丁、鲶鱼、鳗鱼，挑战运河野趣！所有商品通过抖音橱窗销售，欢迎关注获取渔具动态！</p>
+        <a href="https://www.douyin.com/user/MS4wLjABAAAA8jzJnzR9cQ-hFRhpzqISFcsDIS_B0gmsuX0OFLVy-mOXsfnOWkujToJ6JM8TmhJJ" class="btn" target="_blank">关注抖音</a>
+    </section>
+
+    <section id="qrcode" class="qrcode-section">
+        <h2>扫描二维码，关注户外程老板</h2>
+        <p>有更多優惠的宝贝，快来看看吧！</p>
+        <img src="https://xai-artifact.s3.us-east-1.amazonaws.com/481e4f62-c4ee-4860-b585-8dba552ce2b5/attachment-0.png" alt="户外程老板抖音二维码">
+        <p>保存图片到相册，打开抖音，搜索或扫一扫</p>
+    </section>
+
+    <section id="contact">
+        <h2>联系我们</h2>
+        <p>抖音主页：<a href="https://www.douyin.com/user/MS4wLjABAAAA8jzJnzR9cQ-hFRhpzqISFcsDIS_B0gmsuX0OFLVy-mOXsfnOWkujToJ6JM8TmhJJ" target="_blank">程老板渔具</a><br>
+        邮箱：example@email.com（请替换为真实邮箱）<br>
+        电话：+86 123 4567 8900（请替换为真实电话）</p>
+    </section>
+
+    <footer>
+        <p>© 2025 程老板渔具。保留所有权利。关注我们的<a href="https://www.douyin.com/user/MS4wLjABAAAA8jzJnzR9cQ-hFRhpzqISFcsDIS_B0gmsuX0OFLVy-mOXsfnOWkujToJ6JM8TmhJJ" target="_blank">抖音主页</a>！</p>
+    </footer>
+
+    <script>
+        document.querySelector('.nav-toggle').addEventListener('click', () => {
+            document.querySelector('nav ul').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
