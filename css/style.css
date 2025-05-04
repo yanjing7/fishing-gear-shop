@@ -2221,4 +2221,8 @@ h2::after {
         flex-direction: column;
         align-items: flex-start;
     }
+}
+
+.fab.fa-bilibili {
+    margin-right: 5px;
 } 
