@@ -65,7 +65,7 @@ window.fallbackProductsJson = `[
         "title": "程老板定制串钩",
         "price": "5.00",
         "originalPrice": "8.00",
-        "imageUrl": "img/custom-hooks.jpg",
+        "imageUrl": "https://source.unsplash.com/random/400x300/?fishing,hook",
         "detailUrl": "#",
         "sales": "268",
         "category": "配件",
