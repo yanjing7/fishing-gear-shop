@@ -63,8 +63,8 @@ window.fallbackProductsJson = `[
     {
         "id": "custom-hooks",
         "name": "程老板定制串钩",
-        "price": 29.9,
-        "originalPrice": 39.9,
+        "price": 7.00,
+        "originalPrice": 10.00,
         "imageUrl": "https://i.imgur.com/s8aNPE5.jpg",
         "description": "专业钓鱼串钩，采用高强度钢丝，耐腐蚀，弹性好，钩尖锋利，适合各种淡水鱼类。",
         "category": "饵料",
