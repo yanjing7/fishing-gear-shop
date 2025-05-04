@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="程老板渔具视频教程，学习野钓技巧，观看实战钓鱼视频。">
+    <meta name="keywords" content="程老板渔具, 钓鱼视频, 野钓教程, 运河钓鱼, 黄辣丁, 鲶鱼, 鳗鱼">
+    <title>程老板渔具 - 视频教程</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .video-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .video-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .video-frame {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 比例 */
+        }
+        
+        .video-frame iframe,
+        .video-frame video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .video-info {
+            padding: 15px;
+        }
+        
+        .video-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #2a4d69;
+        }
+        
+        .video-desc {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .video-date {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        .video-category {
+            display: inline-block;
+            background-color: #4a7043;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .back-to-home {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background-color: #2a4d69;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .back-to-home:hover {
+            background-color: #1d3557;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">程老板渔具</div>
+            <ul>
+                <li><a href="index.html">首页</a></li>
+                <li><a href="index.html#products">渔具商城</a></li>
+                <li><a href="index.html#guide">野钓攻略</a></li>
+                <li><a href="videos.html" class="active">视频教程</a></li>
+                <li><a href="index.html#about">关于我们</a></li>
+                <li><a href="index.html#contact">联系我们</a></li>
+            </ul>
+            <div class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">0</span>
+            </div>
+            <div class="nav-toggle">☰</div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" style="background-image: url('img/video-banner.jpg');">
+            <div class="hero-content">
+                <h1>钓鱼视频教程</h1>
+                <p>学习专业野钓技巧，观看实战钓鱼视频，提升您的钓鱼技能！</p>
+            </div>
+        </section>
+
+        <div class="video-container">
+            <h2>最新视频</h2>
+            
+            <div class="video-grid">
+                <!-- 视频1 - 抖音嵌入 -->
+                <div class="video-card">
+                    <div class="video-frame">
+                        <!-- 替换成您的抖音视频嵌入代码 -->
+                        <iframe src="https://player.bilibili.com/player.html?aid=574369520&bvid=BV1rz4y1s7x4&cid=1132413063&p=1" 
+                                scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> 
+                        </iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="video-category">野钓技巧</span>
+                        <h3 class="video-title">运河野钓黄辣丁技巧全解析</h3>
+                        <p class="video-desc">详解运河岸边如何找点、打窝、调漂，轻松钓获黄辣丁的全过程。</p>
+                        <p class="video-date">发布于：2023-06-15</p>
+                    </div>
+                </div>
+                
+                <!-- 视频2 - 抖音嵌入 -->
+                <div class="video-card">
+                    <div class="video-frame">
+                        <!-- 替换成您的抖音视频嵌入代码 -->
+                        <iframe src="https://player.bilibili.com/player.html?aid=617595065&bvid=BV1j84y1t7Cr&cid=1055075170&p=1" 
+                                scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> 
+                        </iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="video-category">装备评测</span>
+                        <h3 class="video-title">筏竿选购指南与实战测评</h3>
+                        <p class="video-desc">详细介绍如何选择适合运河钓鱼的筏竿，实际使用效果对比。</p>
+                        <p class="video-date">发布于：2023-05-22</p>
+                    </div>
+                </div>
+                
+                <!-- 视频3 - 抖音嵌入 -->
+                <div class="video-card">
+                    <div class="video-frame">
+                        <!-- 替换成您的抖音视频嵌入代码 -->
+                        <iframe src="https://player.bilibili.com/player.html?aid=962128063&bvid=BV1JH4y1M7kE&cid=1233687112&p=1" 
+                                scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> 
+                        </iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="video-category">实战野钓</span>
+                        <h3 class="video-title">夜钓鲶鱼实战技巧分享</h3>
+                        <p class="video-desc">夏季运河夜钓大鲶鱼的全过程，包括钓位选择、饵料配方和实战技巧。</p>
+                        <p class="video-date">发布于：2023-07-10</p>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 style="margin-top: 50px;">热门教程</h2>
+            
+            <div class="video-grid">
+                <!-- 视频4 - 本地视频示例（如果有） -->
+                <div class="video-card">
+                    <div class="video-frame">
+                        <!-- 如果您上传了本地视频，可以使用这个 -->
+                        <video controls>
+                            <source src="https://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+                            您的浏览器不支持视频标签。
+                        </video>
+                    </div>
+                    <div class="video-info">
+                        <span class="video-category">新手入门</span>
+                        <h3 class="video-title">钓鱼入门必学技能</h3>
+                        <p class="video-desc">适合初学者的基础教程，包括钓具的选择、组装和基本钓法。</p>
+                        <p class="video-date">发布于：2023-04-05</p>
+                    </div>
+                </div>
+                
+                <!-- 视频5 - B站示例 -->
+                <div class="video-card">
+                    <div class="video-frame">
+                        <iframe src="https://player.bilibili.com/player.html?aid=664365222&bvid=BV18a4y1L7FC&cid=1313066309&p=1" 
+                                scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> 
+                        </iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="video-category">饵料配方</span>
+                        <h3 class="video-title">自制万能饵料配方揭秘</h3>
+                        <p class="video-desc">教你制作适合运河钓鱼的特效饵料，黄辣丁、鲶鱼都爱吃。</p>
+                        <p class="video-date">发布于：2023-06-02</p>
+                    </div>
+                </div>
+                
+                <!-- 视频6 - 抖音示例 -->
+                <div class="video-card">
+                    <div class="video-frame">
+                        <iframe src="https://player.bilibili.com/player.html?aid=365288851&bvid=BV13Z4y1i7Uw&cid=1249156264&p=1" 
+                                scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> 
+                        </iframe>
+                    </div>
+                    <div class="video-info">
+                        <span class="video-category">钓场探秘</span>
+                        <h3 class="video-title">运河最佳钓点探秘</h3>
+                        <p class="video-desc">揭秘运河沿岸的黄金钓点，教你如何判断鱼情和选择最佳位置。</p>
+                        <p class="video-date">发布于：2023-07-25</p>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="index.html" class="back-to-home">
+                <i class="fas fa-arrow-left"></i> 返回首页
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>© 2025 程老板渔具 版权所有</p>
+            <p>关注我们的<a href="https://www.douyin.com/user/MS4wLjABAAAA8jzJnzR9cQ-hFRhpzqISFcsDIS_B0gmsuX0OFLVy-mOXsfnOWkujToJ6JM8TmhJJ" target="_blank">抖音主页</a>获取更多优惠！</p>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        // 视频页面特定的JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            // 可以添加视频相关的JS功能
+            // 如视频分类筛选、懒加载等
+        });
+    </script>
+</body>
+</html> 
