@@ -6,7 +6,7 @@
 const CONFIG = {
     // 抖音用户ID，用于爬取橱窗商品
     // 在实际使用中替换为自己的抖音用户ID
-    douyinUserId: 'MS4wLjABAAAA8jzJnzR9cQ-hFRhpzqISFcsDIS_B0gmsuX0OFLVy-mOXsfnOWkujToJ6JM8TmhJJ',
+    douyinUserId: '你的抖音ID',
     
     // 本地存储键名
     localStorageKeys: {
@@ -254,7 +254,7 @@ class ShoppingCart {
     // 结账处理
     checkout() {
         // 抖音分享口令
-        const douyinShareCode = "2 D@U.LJ 03/19 【户外程老板的推:/ 荐橱窗】\n有很多很赞的宝贝，快来看看吧！\nббra5UlD5X3W8бб长按复➕ ©此条消息，达幵ĎÔÛýÌŃ搜索";
+        const douyinShareCode = "在这里填入你的抖音店铺分享口令";
         
         // 创建一个模态框显示抖音分享口令
         const modalHtml = `
@@ -514,7 +514,7 @@ class ProductManager {
         }
         
         // 抖音分享口令
-        const douyinShareCode = "2 D@U.LJ 03/19 【户外程老板的推:/ 荐橱窗】\n有很多很赞的宝贝，快来看看吧！\nббra5UlD5X3W8бб长按复➕ ©此条消息，达幵ĎÔÛýÌŃ搜索";
+        const douyinShareCode = "在这里填入你的抖音店铺分享口令";
         
         this.productsGrid.innerHTML = this.filteredProducts.map(product => `
             <div class="product-card" data-id="${product.id}">
@@ -755,7 +755,7 @@ class ProductManager {
     // 显示抖音分享模态框
     showDouyinShareModal(product) {
         // 抖音分享口令
-        const douyinShareCode = "2 D@U.LJ 03/19 【户外程老板的推:/ 荐橱窗】\n有很多很赞的宝贝，快来看看吧！\nббra5UlD5X3W8бб长按复➕ ©此条消息，达幵ĎÔÛýÌŃ搜索";
+        const douyinShareCode = "在这里填入你的抖音店铺分享口令";
         
         // 创建抖音分享模态框
         const modalHtml = `
