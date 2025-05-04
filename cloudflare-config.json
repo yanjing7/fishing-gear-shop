@@ -1,0 +1,21 @@
+{
+  "name": "fishing-gear-shop",
+  "routes": [
+    {
+      "pattern": "*",
+      "script": null,
+      "headers": {
+        "Strict-Transport-Security": "max-age=0",
+        "X-Content-Type-Options": "nosniff"
+      }
+    }
+  ],
+  "ssl": {
+    "minimum_version": "TLSv1.0",
+    "ciphers": [
+      "ECDHE-RSA-AES128-GCM-SHA256",
+      "AES128-SHA",
+      "DES-CBC3-SHA"
+    ]
+  }
+} 
