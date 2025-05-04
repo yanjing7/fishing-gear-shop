@@ -2225,4 +2225,16 @@ h2::after {
 
 .fab.fa-bilibili {
     margin-right: 5px;
+}
+
+.video-embed {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 比例 */
+    background-color: #f5f5f5;
+    overflow: hidden;
+}
+
+.video-embed iframe {
+    border-radius: 8px 8px 0 0;
 } 
