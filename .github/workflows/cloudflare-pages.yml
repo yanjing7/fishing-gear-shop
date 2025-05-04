@@ -11,7 +11,16 @@ jobs:
     name: Deploy to Cloudflare Pages
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       
+      # 设置Node.js环境（如果需要构建）
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          
+      # 直接部署静态文件      
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
@@ -19,4 +28,6 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: fishing-gear-shop
           directory: .
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }} 
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
+          wranglerVersion: '3' 
