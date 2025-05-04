@@ -61,15 +61,17 @@ document.addEventListener('DOMContentLoaded', () => {
 // 为了防止跨域问题，当抖音API调用失败时，可以使用这个JSON作为备用数据
 window.fallbackProductsJson = `[
     {
-        "id": "custom-hooks-001",
-        "title": "程老板定制串钩",
-        "price": "5.00",
-        "originalPrice": "8.00",
-        "imageUrl": "https://source.unsplash.com/random/400x300/?fishing,hook",
-        "detailUrl": "#",
-        "sales": "268",
-        "category": "配件",
-        "description": "程老板专用定制串钩，适合黄辣丁、小鲶鱼等运河野钓，高强度耐用，售价5元/付。"
+        "id": "custom-hooks",
+        "name": "程老板定制串钩",
+        "price": 29.9,
+        "originalPrice": 39.9,
+        "imageUrl": "https://i.imgur.com/s8aNPE5.jpg",
+        "description": "专业钓鱼串钩，采用高强度钢丝，耐腐蚀，弹性好，钩尖锋利，适合各种淡水鱼类。",
+        "category": "饵料",
+        "inStock": true,
+        "isFeatured": true,
+        "douyinCode": "23897650921",
+        "url": "https://v.douyin.com/h4UKpJR/"
     },
     {
         "id": "raft-rod-001",

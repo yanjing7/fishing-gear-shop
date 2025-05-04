@@ -108,24 +108,6 @@
             </div>
         </section>
 
-        <!-- 支付方式部分 -->
-        <section id="payment">
-            <h2>支付方式</h2>
-            <div class="payment-methods">
-                <div class="payment-method wechat">
-                    <h3>微信支付</h3>
-                    <img src="img/wechat-qrcode.jpg" alt="微信支付二维码">
-                    <p>程老板来烤全羊(*磊)</p>
-                </div>
-                
-                <div class="payment-method alipay">
-                    <h3>支付宝</h3>
-                    <img src="img/alipay-qrcode.jpg" alt="支付宝二维码">
-                    <p>*磊</p>
-                </div>
-            </div>
-        </section>
-
         <section id="qrcode" class="qrcode-section">
             <h2>扫描二维码，关注户外程老板</h2>
             <p>有更多優惠的宝贝，快来看看吧！</p>
