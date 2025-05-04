@@ -96,6 +96,35 @@
         .back-to-home:hover {
             background-color: #1d3557;
         }
+
+        .douyin-link {
+            display: block;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .douyin-link a {
+            display: inline-flex;
+            align-items: center;
+            color: #fe2c55;
+            text-decoration: none;
+            font-weight: bold;
+            transition: opacity 0.3s;
+        }
+
+        .douyin-link a:hover {
+            opacity: 0.8;
+        }
+
+        .douyin-link i {
+            margin-right: 5px;
+        }
+
+        .hero {
+            background-image: url('https://img.freepik.com/free-photo/man-fishing-lake_23-2149048832.jpg') !important;
+            background-size: cover;
+            background-position: center;
+        }
     </style>
 </head>
 <body>
@@ -119,7 +148,7 @@
     </header>
 
     <main>
-        <section class="hero" style="background-image: url('img/video-banner.jpg');">
+        <section class="hero">
             <div class="hero-content">
                 <h1>钓鱼视频教程</h1>
                 <p>学习专业野钓技巧，观看实战钓鱼视频，提升您的钓鱼技能！</p>
@@ -127,54 +156,63 @@
         </section>
 
         <div class="video-container">
-            <h2>最新视频</h2>
+            <h2>程老板钓鱼视频</h2>
             
             <div class="video-grid">
                 <!-- 视频1 - 抖音嵌入 -->
                 <div class="video-card">
                     <div class="video-frame">
-                        <!-- 替换成您的抖音视频嵌入代码 -->
-                        <iframe src="https://player.bilibili.com/player.html?aid=574369520&bvid=BV1rz4y1s7x4&cid=1132413063&p=1" 
-                                scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> 
-                        </iframe>
+                        <iframe src="https://www.douyin.com/video/7291698723492172073?embed=1" 
+                                frameborder="0" allowfullscreen></iframe>
                     </div>
                     <div class="video-info">
                         <span class="video-category">野钓技巧</span>
                         <h3 class="video-title">运河野钓黄辣丁技巧全解析</h3>
                         <p class="video-desc">详解运河岸边如何找点、打窝、调漂，轻松钓获黄辣丁的全过程。</p>
-                        <p class="video-date">发布于：2023-06-15</p>
+                        <p class="video-date">发布于：2024-01-15</p>
+                        <div class="douyin-link">
+                            <a href="https://www.douyin.com/video/7291698723492172073" target="_blank">
+                                <i class="fab fa-tiktok"></i> 在抖音查看完整视频
+                            </a>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- 视频2 - 抖音嵌入 -->
                 <div class="video-card">
                     <div class="video-frame">
-                        <!-- 替换成您的抖音视频嵌入代码 -->
-                        <iframe src="https://player.bilibili.com/player.html?aid=617595065&bvid=BV1j84y1t7Cr&cid=1055075170&p=1" 
-                                scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> 
-                        </iframe>
+                        <iframe src="https://www.douyin.com/video/7230482478064312605?embed=1" 
+                                frameborder="0" allowfullscreen></iframe>
                     </div>
                     <div class="video-info">
                         <span class="video-category">装备评测</span>
                         <h3 class="video-title">筏竿选购指南与实战测评</h3>
                         <p class="video-desc">详细介绍如何选择适合运河钓鱼的筏竿，实际使用效果对比。</p>
-                        <p class="video-date">发布于：2023-05-22</p>
+                        <p class="video-date">发布于：2023-11-22</p>
+                        <div class="douyin-link">
+                            <a href="https://www.douyin.com/video/7230482478064312605" target="_blank">
+                                <i class="fab fa-tiktok"></i> 在抖音查看完整视频
+                            </a>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- 视频3 - 抖音嵌入 -->
                 <div class="video-card">
                     <div class="video-frame">
-                        <!-- 替换成您的抖音视频嵌入代码 -->
-                        <iframe src="https://player.bilibili.com/player.html?aid=962128063&bvid=BV1JH4y1M7kE&cid=1233687112&p=1" 
-                                scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> 
-                        </iframe>
+                        <iframe src="https://www.douyin.com/video/7175487843401712929?embed=1" 
+                                frameborder="0" allowfullscreen></iframe>
                     </div>
                     <div class="video-info">
                         <span class="video-category">实战野钓</span>
                         <h3 class="video-title">夜钓鲶鱼实战技巧分享</h3>
                         <p class="video-desc">夏季运河夜钓大鲶鱼的全过程，包括钓位选择、饵料配方和实战技巧。</p>
-                        <p class="video-date">发布于：2023-07-10</p>
+                        <p class="video-date">发布于：2023-12-10</p>
+                        <div class="douyin-link">
+                            <a href="https://www.douyin.com/video/7175487843401712929" target="_blank">
+                                <i class="fab fa-tiktok"></i> 在抖音查看完整视频
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -182,52 +220,68 @@
             <h2 style="margin-top: 50px;">热门教程</h2>
             
             <div class="video-grid">
-                <!-- 视频4 - 本地视频示例（如果有） -->
+                <!-- 视频4 - 抖音嵌入 -->
                 <div class="video-card">
                     <div class="video-frame">
-                        <!-- 如果您上传了本地视频，可以使用这个 -->
-                        <video controls>
-                            <source src="https://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
-                            您的浏览器不支持视频标签。
-                        </video>
+                        <iframe src="https://www.douyin.com/video/7163282504703503646?embed=1" 
+                                frameborder="0" allowfullscreen></iframe>
                     </div>
                     <div class="video-info">
                         <span class="video-category">新手入门</span>
                         <h3 class="video-title">钓鱼入门必学技能</h3>
                         <p class="video-desc">适合初学者的基础教程，包括钓具的选择、组装和基本钓法。</p>
-                        <p class="video-date">发布于：2023-04-05</p>
+                        <p class="video-date">发布于：2023-11-05</p>
+                        <div class="douyin-link">
+                            <a href="https://www.douyin.com/video/7163282504703503646" target="_blank">
+                                <i class="fab fa-tiktok"></i> 在抖音查看完整视频
+                            </a>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- 视频5 - B站示例 -->
+                <!-- 视频5 - 抖音嵌入 -->
                 <div class="video-card">
                     <div class="video-frame">
-                        <iframe src="https://player.bilibili.com/player.html?aid=664365222&bvid=BV18a4y1L7FC&cid=1313066309&p=1" 
-                                scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> 
-                        </iframe>
+                        <iframe src="https://www.douyin.com/video/7188547639511456055?embed=1" 
+                                frameborder="0" allowfullscreen></iframe>
                     </div>
                     <div class="video-info">
                         <span class="video-category">饵料配方</span>
                         <h3 class="video-title">自制万能饵料配方揭秘</h3>
                         <p class="video-desc">教你制作适合运河钓鱼的特效饵料，黄辣丁、鲶鱼都爱吃。</p>
-                        <p class="video-date">发布于：2023-06-02</p>
+                        <p class="video-date">发布于：2023-10-02</p>
+                        <div class="douyin-link">
+                            <a href="https://www.douyin.com/video/7188547639511456055" target="_blank">
+                                <i class="fab fa-tiktok"></i> 在抖音查看完整视频
+                            </a>
+                        </div>
                     </div>
                 </div>
                 
-                <!-- 视频6 - 抖音示例 -->
+                <!-- 视频6 - 抖音嵌入 -->
                 <div class="video-card">
                     <div class="video-frame">
-                        <iframe src="https://player.bilibili.com/player.html?aid=365288851&bvid=BV13Z4y1i7Uw&cid=1249156264&p=1" 
-                                scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> 
-                        </iframe>
+                        <iframe src="https://www.douyin.com/video/7148452101381047560?embed=1" 
+                                frameborder="0" allowfullscreen></iframe>
                     </div>
                     <div class="video-info">
                         <span class="video-category">钓场探秘</span>
                         <h3 class="video-title">运河最佳钓点探秘</h3>
                         <p class="video-desc">揭秘运河沿岸的黄金钓点，教你如何判断鱼情和选择最佳位置。</p>
-                        <p class="video-date">发布于：2023-07-25</p>
+                        <p class="video-date">发布于：2023-09-25</p>
+                        <div class="douyin-link">
+                            <a href="https://www.douyin.com/video/7148452101381047560" target="_blank">
+                                <i class="fab fa-tiktok"></i> 在抖音查看完整视频
+                            </a>
+                        </div>
                     </div>
                 </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px; margin-bottom: 20px;">
+                <a href="https://www.douyin.com/user/MS4wLjABAAAA8jzJnzR9cQ-hFRhpzqISFcsDIS_B0gmsuX0OFLVy-mOXsfnOWkujToJ6JM8TmhJJ" class="btn" target="_blank" style="background-color:#fe2c55; border:none;">
+                    <i class="fab fa-tiktok"></i> 更多视频请访问程老板抖音主页
+                </a>
             </div>
             
             <a href="index.html" class="back-to-home">
@@ -247,8 +301,35 @@
     <script>
         // 视频页面特定的JavaScript
         document.addEventListener('DOMContentLoaded', function() {
-            // 可以添加视频相关的JS功能
-            // 如视频分类筛选、懒加载等
+            // 解决抖音视频嵌入问题的备用方案
+            const checkVideoEmbeds = function() {
+                const frames = document.querySelectorAll('.video-frame iframe');
+                frames.forEach(frame => {
+                    // 检查iframe是否能加载
+                    frame.addEventListener('error', function() {
+                        const parentDiv = this.closest('.video-card');
+                        const douyinLink = parentDiv.querySelector('.douyin-link a').getAttribute('href');
+                        
+                        // 如果嵌入失败，显示备用信息
+                        this.style.display = 'none';
+                        const fallbackDiv = document.createElement('div');
+                        fallbackDiv.className = 'video-fallback';
+                        fallbackDiv.innerHTML = `
+                            <div style="height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px; text-align:center; background:#f5f5f5;">
+                                <i class="fab fa-tiktok" style="font-size:3rem; color:#fe2c55; margin-bottom:15px;"></i>
+                                <p style="margin-bottom:15px;">抖音视频无法嵌入显示</p>
+                                <a href="${douyinLink}" target="_blank" class="btn" style="background-color:#fe2c55; border:none;">
+                                    在抖音中观看
+                                </a>
+                            </div>
+                        `;
+                        parentDiv.querySelector('.video-frame').appendChild(fallbackDiv);
+                    });
+                });
+            };
+            
+            // 运行嵌入检查
+            setTimeout(checkVideoEmbeds, 2000);
         });
     </script>
 </body>
