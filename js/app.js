@@ -630,6 +630,8 @@ class ProductManager {
     
     // 显示产品详情
     showProductDetails(product) {
+        if (!product) return;
+        
         // 获取模态框元素
         const modal = document.querySelector('.product-detail-modal');
         const imageElement = modal.querySelector('.product-detail-image img');
@@ -641,33 +643,21 @@ class ProductManager {
         
         // 确保图片URL是有效的
         let imageUrl = product.imageUrl;
-        if (imageUrl && (imageUrl.includes('${window.demoProductImages') || !imageUrl.startsWith('http') && !imageUrl.startsWith('img/'))) {
-            let index = 0;
-            const idMatch = product.id.match(/(\d+)/);
-            if (idMatch && idMatch[1]) {
-                index = Math.min(parseInt(idMatch[1]) - 1, 7);
-            }
-            
-            if (window.demoProductImages && window.demoProductImages[index]) {
-                imageUrl = window.demoProductImages[index];
-            } else {
-                imageUrl = `https://via.placeholder.com/400x300/4a7043/ffffff?text=${encodeURIComponent(product.title || '渔具')}`;
-            }
+        if (!imageUrl || imageUrl.includes('${window.') || !imageUrl.startsWith('http')) {
+            // 使用占位图作为备用
+            imageUrl = `https://via.placeholder.com/400x300/4a7043/ffffff?text=${encodeURIComponent(product.title || product.name || '产品图片')}`;
         }
         
         // 设置详情内容
         imageElement.src = imageUrl;
-        imageElement.alt = product.title;
-        imageElement.onerror = function() {
-            this.src = 'https://via.placeholder.com/400x300/4a7043/ffffff?text=图片加载失败';
-        };
-        titleElement.textContent = product.title;
+        imageElement.alt = product.title || product.name;
+        titleElement.textContent = product.title || product.name;
         priceElement.innerHTML = `¥${product.price} <small><del>¥${product.originalPrice || (parseFloat(product.price) * 1.2).toFixed(2)}</del></small>`;
-        descElement.textContent = product.description;
+        descElement.textContent = product.description || '';
         
-        // 添加支付方式和收款码对定制串钩的特殊处理
+        // 添加支付方式和收款码
         let paymentInfo = '';
-        if (product.id === 'custom-hooks-001') {
+        if (product.id === 'custom-hooks') {
             paymentInfo = `
                 <div class="payment-methods">
                     <h4>支付方式</h4>
@@ -683,16 +673,24 @@ class ProductManager {
                     </div>
                     <div class="payment-qrcode">
                         <div class="qrcode-container alipay-qrcode active">
-                            <img src="img/alipay-qrcode.jpg" alt="支付宝收款码">
+                            <img src="img/alipay-qrcode.jpg" alt="支付宝收款码" onerror="this.src='https://via.placeholder.com/300x300/108ee9/ffffff?text=支付宝收款码'">
                             <p>请使用支付宝扫码支付</p>
                         </div>
                         <div class="qrcode-container wechat-qrcode">
-                            <img src="img/wechat-qrcode.jpg" alt="微信收款码">
+                            <img src="img/wechat-qrcode.jpg" alt="微信收款码" onerror="this.src='https://via.placeholder.com/300x300/09bb07/ffffff?text=微信收款码'">
                             <p>请使用微信扫码支付</p>
                         </div>
                     </div>
                 </div>
             `;
+            
+            // 先移除旧的支付方式元素(如果存在)
+            const oldPayment = modal.querySelector('.payment-methods');
+            if (oldPayment) {
+                oldPayment.remove();
+            }
+            
+            // 添加新的支付方式元素
             descElement.insertAdjacentHTML('afterend', paymentInfo);
             
             // 绑定支付方式切换事件
@@ -702,21 +700,23 @@ class ProductManager {
                 const alipayQrcode = modal.querySelector('.alipay-qrcode');
                 const wechatQrcode = modal.querySelector('.wechat-qrcode');
                 
-                alipayRadio.addEventListener('change', () => {
-                    alipayQrcode.classList.add('active');
-                    wechatQrcode.classList.remove('active');
-                });
-                
-                wechatRadio.addEventListener('change', () => {
-                    wechatQrcode.classList.add('active');
-                    alipayQrcode.classList.remove('active');
-                });
+                if (alipayRadio && wechatRadio) {
+                    alipayRadio.addEventListener('change', () => {
+                        alipayQrcode.classList.add('active');
+                        wechatQrcode.classList.remove('active');
+                    });
+                    
+                    wechatRadio.addEventListener('change', () => {
+                        wechatQrcode.classList.add('active');
+                        alipayQrcode.classList.remove('active');
+                    });
+                }
             }, 100);
         }
         
         // 为按钮绑定事件
         buyNowBtn.onclick = () => {
-            if (product.id === 'custom-hooks-001') {
+            if (product.id === 'custom-hooks') {
                 this.showMessage('请通过上方二维码直接支付', 'info');
             } else {
                 this.showDouyinShareModal(product);

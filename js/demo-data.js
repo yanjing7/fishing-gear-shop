@@ -65,7 +65,7 @@ window.fallbackProductsJson = `[
         "name": "程老板定制串钩",
         "price": 7.00,
         "originalPrice": 10.00,
-        "imageUrl": "https://i.imgur.com/s8aNPE5.jpg",
+        "imageUrl": "https://via.placeholder.com/400x300/4a7043/ffffff?text=程老板定制串钩",
         "description": "专业钓鱼串钩，适合黄辣丁、小鲶鱼等运河野钓，高强度耐用，售价7元/付，3付起卖。",
         "category": "饵料",
         "inStock": true,
