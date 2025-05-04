@@ -54,18 +54,32 @@ class ShoppingCart {
     
     // 添加商品到购物车
     addItem(product, quantity = 1) {
+        // 确保产品有效
+        if (!product || !product.id) {
+            console.error('尝试添加无效产品到购物车', product);
+            return;
+        }
+        
         // 检查商品是否已在购物车中
         const existingItem = this.items.find(item => item.id === product.id);
+        
+        // 确保遵守最小购买量要求
+        const minimumOrder = product.minimumOrder || 1;
+        if (quantity < minimumOrder) {
+            quantity = minimumOrder;
+            this.showMessage(`该商品最少需购买${minimumOrder}付`, 'warning');
+        }
         
         if (existingItem) {
             existingItem.quantity += quantity;
         } else {
             this.items.push({
                 id: product.id,
-                title: product.title,
+                title: product.title || product.name,
                 price: product.price,
                 imageUrl: product.imageUrl,
-                quantity: quantity
+                quantity: quantity,
+                minimumOrder: minimumOrder
             });
         }
         
@@ -73,7 +87,7 @@ class ShoppingCart {
         this.updateCartDisplay();
         
         // 显示添加成功信息
-        this.showMessage(`已添加 ${product.title} 到购物车`);
+        this.showMessage(`已添加 ${product.title || product.name} 到购物车`);
     }
     
     // 从购物车移除商品
@@ -87,6 +101,14 @@ class ShoppingCart {
     updateQuantity(productId, quantity) {
         const item = this.items.find(item => item.id === productId);
         if (item) {
+            // 检查最小购买量
+            const minimumOrder = item.minimumOrder || 1;
+            
+            if (quantity < minimumOrder) {
+                this.showMessage(`该商品最少需购买${minimumOrder}付`, 'warning');
+                quantity = minimumOrder;
+            }
+            
             if (quantity <= 0) {
                 this.removeItem(productId);
             } else {
@@ -506,65 +528,59 @@ class ProductManager {
     
     // 渲染产品列表
     renderProducts() {
-        if (!this.productsGrid) return;
-        
+        const productsContainer = document.querySelector('.products-grid');
+        if (!productsContainer) return;
+
         if (this.filteredProducts.length === 0) {
-            this.productsGrid.innerHTML = '<div class="no-products">没有找到符合条件的商品</div>';
+            productsContainer.innerHTML = '<div class="no-products">找不到匹配的产品</div>';
             return;
         }
-        
-        // 抖音分享口令
-        const douyinShareCode = "在这里填入你的抖音店铺分享口令";
-        
-        this.productsGrid.innerHTML = this.filteredProducts.map(product => {
-            // 确保图片URL是有效的，如果不是则使用备用图片
+
+        productsContainer.innerHTML = this.filteredProducts.map(product => {
+            // 处理价格显示
+            const price = parseFloat(product.price).toFixed(2);
+            const originalPrice = product.originalPrice ? parseFloat(product.originalPrice).toFixed(2) : null;
+
+            // 检查图片URL是否有效
             let imageUrl = product.imageUrl;
-            
-            // 检查URL是否包含插值表达式（这说明模板字符串未被正确解析）
-            if (imageUrl && (imageUrl.includes('${window.demoProductImages') || !imageUrl.startsWith('http') && !imageUrl.startsWith('img/'))) {
-                // 从产品ID提取索引（如果可能）
-                let index = 0;
-                const idMatch = product.id.match(/(\d+)/);
-                if (idMatch && idMatch[1]) {
-                    index = Math.min(parseInt(idMatch[1]) - 1, 7); // 确保索引不超过备用图片数组长度
-                }
-                
-                // 使用备用图片
-                if (window.demoProductImages && window.demoProductImages[index]) {
-                    imageUrl = window.demoProductImages[index];
-                } else {
-                    // 如果没有备用图片，则使用通用占位符
-                    imageUrl = `https://via.placeholder.com/400x300/4a7043/ffffff?text=${encodeURIComponent(product.title || '渔具')}`;
-                }
+            if (!imageUrl || imageUrl.includes('${window.') || !imageUrl.startsWith('http')) {
+                // 使用占位图作为备用
+                imageUrl = `https://via.placeholder.com/400x300/e0e0e0/333333?text=${encodeURIComponent(product.title || product.name || '产品图片')}`;
             }
-            
+
+            // 最小购买量提示
+            const minimumOrderHtml = product.minimumOrder ? 
+                `<div class="min-order">${product.minimumOrder}付起卖</div>` : '';
+
+            // 组装HTML
             return `
-            <div class="product-card" data-id="${product.id}">
-                <div class="product-image">
-                    <img src="${imageUrl}" alt="${product.title}" onerror="this.src='https://via.placeholder.com/400x300/4a7043/ffffff?text=图片加载失败'">
+                <div class="product-card" data-id="${product.id}">
+                    <div class="product-image">
+                        <img src="${imageUrl}" alt="${product.title || product.name}" loading="lazy">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">${product.title || product.name}</h3>
+                        <p class="product-description">${product.description || ''}</p>
+                        <div class="product-meta">
+                            <div class="product-price">
+                                <span class="current-price">¥${price}</span>
+                                ${originalPrice ? `<span class="original-price">¥${originalPrice}</span>` : ''}
+                            </div>
+                            ${minimumOrderHtml}
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn add-to-cart-btn">加入购物车</button>
+                            <button class="btn details-btn">查看详情</button>
+                        </div>
+                    </div>
+                    <a href="#" class="douyin-link" data-id="${product.id}">
+                        <i class="icon-douyin"></i>
+                        去抖音购买
+                    </a>
                 </div>
-                <div class="product-info">
-                    <h3 class="product-title">${product.title}</h3>
-                    <p class="product-desc">${product.description}</p>
-                    <div class="product-price">
-                        ¥${product.price}
-                        ${product.originalPrice ? `<span class="original-price">¥${product.originalPrice}</span>` : ''}
-                    </div>
-                    <div class="product-actions">
-                        <button class="btn add-to-cart-btn">加入购物车</button>
-                        <button class="btn btn-secondary view-details-btn">查看详情</button>
-                    </div>
-                    <div class="product-source">
-                        <a href="javascript:void(0)" class="douyin-link" data-product-id="${product.id}">
-                            <i class="fab fa-tiktok"></i> 去抖音购买
-                        </a>
-                    </div>
-                </div>
-            </div>
             `;
         }).join('');
-        
-        // 绑定产品卡片事件
+
         this.bindProductEvents();
     }
     
@@ -575,24 +591,16 @@ class ProductManager {
             btn.addEventListener('click', e => {
                 const card = e.target.closest('.product-card');
                 const productId = card.dataset.id;
-                const product = this.findProductById(productId);
-                
-                if (product) {
-                    app.cart.addItem(product);
-                }
+                this.addToCart(productId);
             });
         });
         
         // 查看详情按钮
-        document.querySelectorAll('.view-details-btn').forEach(btn => {
+        document.querySelectorAll('.details-btn').forEach(btn => {
             btn.addEventListener('click', e => {
                 const card = e.target.closest('.product-card');
                 const productId = card.dataset.id;
-                const product = this.findProductById(productId);
-                
-                if (product) {
-                    this.showProductDetails(product);
-                }
+                this.showProductDetails(this.findProductById(productId));
             });
         });
         
@@ -600,12 +608,8 @@ class ProductManager {
         document.querySelectorAll('.douyin-link').forEach(link => {
             link.addEventListener('click', e => {
                 e.preventDefault();
-                const productId = link.dataset.productId;
-                const product = this.findProductById(productId);
-                
-                if (product) {
-                    this.showDouyinShareModal(product);
-                }
+                const productId = link.dataset.id;
+                this.showDouyinShareModal(this.findProductById(productId));
             });
         });
         
@@ -614,11 +618,7 @@ class ProductManager {
             img.addEventListener('click', e => {
                 const card = e.target.closest('.product-card');
                 const productId = card.dataset.id;
-                const product = this.findProductById(productId);
-                
-                if (product) {
-                    this.showProductDetails(product);
-                }
+                this.showProductDetails(this.findProductById(productId));
             });
         });
     }
@@ -725,7 +725,7 @@ class ProductManager {
         };
         
         addToCartBtn.onclick = () => {
-            app.cart.addItem(product);
+            this.addToCart(product.id);
         };
         
         // 显示模态框
@@ -964,6 +964,20 @@ class ProductManager {
             option.textContent = category;
             this.categorySelect.appendChild(option);
         });
+    }
+
+    // 添加商品到购物车
+    addToCart(productId) {
+        const product = this.findProductById(productId);
+        if (!product) return;
+        
+        // 检查最小购买量
+        const minimumOrder = product.minimumOrder || 1;
+        
+        // 使用购物车实例添加商品
+        if (window.cart) {
+            window.cart.addItem(product, minimumOrder);
+        }
     }
 }
 

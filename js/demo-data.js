@@ -66,12 +66,13 @@ window.fallbackProductsJson = `[
         "price": 7.00,
         "originalPrice": 10.00,
         "imageUrl": "https://i.imgur.com/s8aNPE5.jpg",
-        "description": "专业钓鱼串钩，采用高强度钢丝，耐腐蚀，弹性好，钩尖锋利，适合各种淡水鱼类。",
+        "description": "专业钓鱼串钩，适合黄辣丁、小鲶鱼等运河野钓，高强度耐用，售价7元/付，3付起卖。",
         "category": "饵料",
         "inStock": true,
         "isFeatured": true,
         "douyinCode": "23897650921",
-        "url": "https://v.douyin.com/h4UKpJR/"
+        "url": "https://v.douyin.com/h4UKpJR/",
+        "minimumOrder": 3
     },
     {
         "id": "raft-rod-001",

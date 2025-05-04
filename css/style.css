@@ -233,10 +233,34 @@ h2::after {
 }
 
 .product-price {
-    font-size: 1.3rem;
-    color: #e63946;
+    font-size: 1.25rem;
+    color: #ff6b35;
     font-weight: bold;
-    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.current-price {
+    margin-right: 10px;
+}
+
+.original-price {
+    font-size: 0.9rem;
+    color: #999;
+    text-decoration: line-through;
+}
+
+/* 最小订购量 */
+.min-order {
+    display: inline-block;
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    margin-left: 10px;
+    font-weight: bold;
 }
 
 .product-actions {
