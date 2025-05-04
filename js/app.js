@@ -637,10 +637,6 @@ class ProductManager {
                             <button class="btn details-btn">查看详情</button>
                         </div>
                     </div>
-                    <a href="#" class="douyin-link" data-id="${product.id}">
-                        <i class="icon-douyin"></i>
-                        去抖音购买
-                    </a>
                 </div>
             `;
         }).join('');
@@ -665,15 +661,6 @@ class ProductManager {
                 const card = e.target.closest('.product-card');
                 const productId = card.dataset.id;
                 this.showProductDetails(this.findProductById(productId));
-            });
-        });
-        
-        // 抖音链接点击事件
-        document.querySelectorAll('.douyin-link').forEach(link => {
-            link.addEventListener('click', e => {
-                e.preventDefault();
-                const productId = link.dataset.id;
-                this.showDouyinShareModal(this.findProductById(productId));
             });
         });
         
@@ -780,14 +767,9 @@ class ProductManager {
         
         // 为按钮绑定事件
         buyNowBtn.onclick = () => {
-            if (product.id === 'custom-hooks') {
-                // 使用新的支付界面
-                this.showPaymentPage(product);
-                modal.classList.remove('active');
-            } else {
-                this.showDouyinShareModal(product);
-                modal.classList.remove('active');
-            }
+            // 直接使用我们的自定义支付界面
+            this.showPaymentPage(product);
+            modal.classList.remove('active');
         };
         
         addToCartBtn.onclick = () => {
@@ -907,7 +889,8 @@ class ProductManager {
         confirmBtn.addEventListener('click', () => {
             if (confirm("您确认已完成支付吗？")) {
                 clearInterval(countdown);
-                this.showMessage("感谢您的支付！请等待管理员审核。", "success");
+                // 跳转到联系管理员页面
+                window.location.href = "contact-admin.html";
                 document.body.removeChild(modal);
             }
         });
