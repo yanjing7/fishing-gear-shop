@@ -35,20 +35,47 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         
-        .video-frame {
+        .video-preview {
             position: relative;
             width: 100%;
             padding-bottom: 56.25%; /* 16:9 比例 */
+            background-color: #f5f5f5;
+            overflow: hidden;
         }
         
-        .video-frame iframe,
-        .video-frame video {
+        .video-preview img {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border: none;
+            object-fit: cover;
+        }
+        
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background-color: rgba(254, 44, 85, 0.8);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            transition: background-color 0.3s;
+        }
+        
+        .play-button i {
+            color: white;
+            font-size: 24px;
+            margin-left: 4px; /* 微调使三角形图标居中 */
+        }
+        
+        .video-card:hover .play-button {
+            background-color: rgba(254, 44, 85, 1);
         }
         
         .video-info {
@@ -82,6 +109,34 @@
             margin-bottom: 10px;
         }
         
+        .douyin-link {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        .douyin-link a {
+            display: inline-flex;
+            align-items: center;
+            background-color: #fe2c55;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 15px;
+            border-radius: 20px;
+            transition: opacity 0.3s, transform 0.2s;
+        }
+
+        .douyin-link a:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .douyin-link i {
+            margin-right: 5px;
+            font-size: 1.1em;
+        }
+
         .back-to-home {
             display: inline-block;
             margin: 20px 0;
@@ -97,33 +152,32 @@
             background-color: #1d3557;
         }
 
-        .douyin-link {
-            display: block;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .douyin-link a {
-            display: inline-flex;
-            align-items: center;
-            color: #fe2c55;
-            text-decoration: none;
-            font-weight: bold;
-            transition: opacity 0.3s;
-        }
-
-        .douyin-link a:hover {
-            opacity: 0.8;
-        }
-
-        .douyin-link i {
-            margin-right: 5px;
-        }
-
         .hero {
-            background-image: url('https://img.freepik.com/free-photo/man-fishing-lake_23-2149048832.jpg') !important;
+            background-image: url('https://img.freepik.com/free-photo/fisherman-fishing-rod-sunrise_335224-556.jpg?w=1200') !important;
             background-size: cover;
             background-position: center;
+        }
+        
+        .douyin-main-btn {
+            display: inline-block;
+            background-color: #fe2c55;
+            color: white;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            text-decoration: none;
+            margin: 40px auto;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 10px rgba(254, 44, 85, 0.3);
+        }
+        
+        .douyin-main-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(254, 44, 85, 0.4);
+        }
+        
+        .douyin-main-btn i {
+            margin-right: 8px;
         }
     </style>
 </head>
@@ -159,12 +213,16 @@
             <h2>程老板钓鱼视频</h2>
             
             <div class="video-grid">
-                <!-- 视频1 - 抖音嵌入 -->
+                <!-- 视频1 -->
                 <div class="video-card">
-                    <div class="video-frame">
-                        <iframe src="https://www.douyin.com/video/7291698723492172073?embed=1" 
-                                frameborder="0" allowfullscreen></iframe>
-                    </div>
+                    <a href="https://www.douyin.com/video/7291698723492172073" target="_blank">
+                        <div class="video-preview">
+                            <img src="https://img.freepik.com/free-photo/young-bearded-man-fishing-lake_23-2148604211.jpg?w=900" alt="运河野钓黄辣丁技巧全解析">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </a>
                     <div class="video-info">
                         <span class="video-category">野钓技巧</span>
                         <h3 class="video-title">运河野钓黄辣丁技巧全解析</h3>
@@ -172,18 +230,22 @@
                         <p class="video-date">发布于：2024-01-15</p>
                         <div class="douyin-link">
                             <a href="https://www.douyin.com/video/7291698723492172073" target="_blank">
-                                <i class="fab fa-tiktok"></i> 在抖音查看完整视频
+                                <i class="fab fa-tiktok"></i> 在抖音中观看
                             </a>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 视频2 - 抖音嵌入 -->
+                <!-- 视频2 -->
                 <div class="video-card">
-                    <div class="video-frame">
-                        <iframe src="https://www.douyin.com/video/7230482478064312605?embed=1" 
-                                frameborder="0" allowfullscreen></iframe>
-                    </div>
+                    <a href="https://www.douyin.com/video/7230482478064312605" target="_blank">
+                        <div class="video-preview">
+                            <img src="https://img.freepik.com/free-photo/man-fishing-with-special-rod-lake_23-2149058764.jpg?w=900" alt="筏竿选购指南与实战测评">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </a>
                     <div class="video-info">
                         <span class="video-category">装备评测</span>
                         <h3 class="video-title">筏竿选购指南与实战测评</h3>
@@ -191,18 +253,22 @@
                         <p class="video-date">发布于：2023-11-22</p>
                         <div class="douyin-link">
                             <a href="https://www.douyin.com/video/7230482478064312605" target="_blank">
-                                <i class="fab fa-tiktok"></i> 在抖音查看完整视频
+                                <i class="fab fa-tiktok"></i> 在抖音中观看
                             </a>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 视频3 - 抖音嵌入 -->
+                <!-- 视频3 -->
                 <div class="video-card">
-                    <div class="video-frame">
-                        <iframe src="https://www.douyin.com/video/7175487843401712929?embed=1" 
-                                frameborder="0" allowfullscreen></iframe>
-                    </div>
+                    <a href="https://www.douyin.com/video/7175487843401712929" target="_blank">
+                        <div class="video-preview">
+                            <img src="https://img.freepik.com/free-photo/man-fishing-sunset_23-2149507508.jpg?w=900" alt="夜钓鲶鱼实战技巧分享">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </a>
                     <div class="video-info">
                         <span class="video-category">实战野钓</span>
                         <h3 class="video-title">夜钓鲶鱼实战技巧分享</h3>
@@ -210,7 +276,7 @@
                         <p class="video-date">发布于：2023-12-10</p>
                         <div class="douyin-link">
                             <a href="https://www.douyin.com/video/7175487843401712929" target="_blank">
-                                <i class="fab fa-tiktok"></i> 在抖音查看完整视频
+                                <i class="fab fa-tiktok"></i> 在抖音中观看
                             </a>
                         </div>
                     </div>
@@ -220,12 +286,16 @@
             <h2 style="margin-top: 50px;">热门教程</h2>
             
             <div class="video-grid">
-                <!-- 视频4 - 抖音嵌入 -->
+                <!-- 视频4 -->
                 <div class="video-card">
-                    <div class="video-frame">
-                        <iframe src="https://www.douyin.com/video/7163282504703503646?embed=1" 
-                                frameborder="0" allowfullscreen></iframe>
-                    </div>
+                    <a href="https://www.douyin.com/video/7163282504703503646" target="_blank">
+                        <div class="video-preview">
+                            <img src="https://img.freepik.com/free-photo/man-fishing-lake_1150-12738.jpg?w=900" alt="钓鱼入门必学技能">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </a>
                     <div class="video-info">
                         <span class="video-category">新手入门</span>
                         <h3 class="video-title">钓鱼入门必学技能</h3>
@@ -233,18 +303,22 @@
                         <p class="video-date">发布于：2023-11-05</p>
                         <div class="douyin-link">
                             <a href="https://www.douyin.com/video/7163282504703503646" target="_blank">
-                                <i class="fab fa-tiktok"></i> 在抖音查看完整视频
+                                <i class="fab fa-tiktok"></i> 在抖音中观看
                             </a>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 视频5 - 抖音嵌入 -->
+                <!-- 视频5 -->
                 <div class="video-card">
-                    <div class="video-frame">
-                        <iframe src="https://www.douyin.com/video/7188547639511456055?embed=1" 
-                                frameborder="0" allowfullscreen></iframe>
-                    </div>
+                    <a href="https://www.douyin.com/video/7188547639511456055" target="_blank">
+                        <div class="video-preview">
+                            <img src="https://img.freepik.com/free-photo/fly-fishing-rod-with-reel-lake_23-2149435151.jpg?w=900" alt="自制万能饵料配方揭秘">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </a>
                     <div class="video-info">
                         <span class="video-category">饵料配方</span>
                         <h3 class="video-title">自制万能饵料配方揭秘</h3>
@@ -252,18 +326,22 @@
                         <p class="video-date">发布于：2023-10-02</p>
                         <div class="douyin-link">
                             <a href="https://www.douyin.com/video/7188547639511456055" target="_blank">
-                                <i class="fab fa-tiktok"></i> 在抖音查看完整视频
+                                <i class="fab fa-tiktok"></i> 在抖音中观看
                             </a>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 视频6 - 抖音嵌入 -->
+                <!-- 视频6 -->
                 <div class="video-card">
-                    <div class="video-frame">
-                        <iframe src="https://www.douyin.com/video/7148452101381047560?embed=1" 
-                                frameborder="0" allowfullscreen></iframe>
-                    </div>
+                    <a href="https://www.douyin.com/video/7148452101381047560" target="_blank">
+                        <div class="video-preview">
+                            <img src="https://img.freepik.com/free-photo/beautiful-view-lake-mountains-morning_23-2150421392.jpg?w=900" alt="运河最佳钓点探秘">
+                            <div class="play-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </a>
                     <div class="video-info">
                         <span class="video-category">钓场探秘</span>
                         <h3 class="video-title">运河最佳钓点探秘</h3>
@@ -271,16 +349,16 @@
                         <p class="video-date">发布于：2023-09-25</p>
                         <div class="douyin-link">
                             <a href="https://www.douyin.com/video/7148452101381047560" target="_blank">
-                                <i class="fab fa-tiktok"></i> 在抖音查看完整视频
+                                <i class="fab fa-tiktok"></i> 在抖音中观看
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <div style="text-align: center; margin-top: 40px; margin-bottom: 20px;">
-                <a href="https://www.douyin.com/user/MS4wLjABAAAA8jzJnzR9cQ-hFRhpzqISFcsDIS_B0gmsuX0OFLVy-mOXsfnOWkujToJ6JM8TmhJJ" class="btn" target="_blank" style="background-color:#fe2c55; border:none;">
-                    <i class="fab fa-tiktok"></i> 更多视频请访问程老板抖音主页
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="https://www.douyin.com/user/MS4wLjABAAAA8jzJnzR9cQ-hFRhpzqISFcsDIS_B0gmsuX0OFLVy-mOXsfnOWkujToJ6JM8TmhJJ" class="douyin-main-btn" target="_blank">
+                    <i class="fab fa-tiktok"></i> 访问程老板抖音主页查看更多视频
                 </a>
             </div>
             
@@ -298,39 +376,5 @@
     </footer>
 
     <script src="js/app.js"></script>
-    <script>
-        // 视频页面特定的JavaScript
-        document.addEventListener('DOMContentLoaded', function() {
-            // 解决抖音视频嵌入问题的备用方案
-            const checkVideoEmbeds = function() {
-                const frames = document.querySelectorAll('.video-frame iframe');
-                frames.forEach(frame => {
-                    // 检查iframe是否能加载
-                    frame.addEventListener('error', function() {
-                        const parentDiv = this.closest('.video-card');
-                        const douyinLink = parentDiv.querySelector('.douyin-link a').getAttribute('href');
-                        
-                        // 如果嵌入失败，显示备用信息
-                        this.style.display = 'none';
-                        const fallbackDiv = document.createElement('div');
-                        fallbackDiv.className = 'video-fallback';
-                        fallbackDiv.innerHTML = `
-                            <div style="height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px; text-align:center; background:#f5f5f5;">
-                                <i class="fab fa-tiktok" style="font-size:3rem; color:#fe2c55; margin-bottom:15px;"></i>
-                                <p style="margin-bottom:15px;">抖音视频无法嵌入显示</p>
-                                <a href="${douyinLink}" target="_blank" class="btn" style="background-color:#fe2c55; border:none;">
-                                    在抖音中观看
-                                </a>
-                            </div>
-                        `;
-                        parentDiv.querySelector('.video-frame').appendChild(fallbackDiv);
-                    });
-                });
-            };
-            
-            // 运行嵌入检查
-            setTimeout(checkVideoEmbeds, 2000);
-        });
-    </script>
 </body>
 </html> 
