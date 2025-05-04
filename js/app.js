@@ -516,10 +516,32 @@ class ProductManager {
         // 抖音分享口令
         const douyinShareCode = "在这里填入你的抖音店铺分享口令";
         
-        this.productsGrid.innerHTML = this.filteredProducts.map(product => `
+        this.productsGrid.innerHTML = this.filteredProducts.map(product => {
+            // 确保图片URL是有效的，如果不是则使用备用图片
+            let imageUrl = product.imageUrl;
+            
+            // 检查URL是否包含插值表达式（这说明模板字符串未被正确解析）
+            if (imageUrl && (imageUrl.includes('${window.demoProductImages') || !imageUrl.startsWith('http') && !imageUrl.startsWith('img/'))) {
+                // 从产品ID提取索引（如果可能）
+                let index = 0;
+                const idMatch = product.id.match(/(\d+)/);
+                if (idMatch && idMatch[1]) {
+                    index = Math.min(parseInt(idMatch[1]) - 1, 7); // 确保索引不超过备用图片数组长度
+                }
+                
+                // 使用备用图片
+                if (window.demoProductImages && window.demoProductImages[index]) {
+                    imageUrl = window.demoProductImages[index];
+                } else {
+                    // 如果没有备用图片，则使用通用占位符
+                    imageUrl = `https://via.placeholder.com/400x300/4a7043/ffffff?text=${encodeURIComponent(product.title || '渔具')}`;
+                }
+            }
+            
+            return `
             <div class="product-card" data-id="${product.id}">
                 <div class="product-image">
-                    <img src="${product.imageUrl}" alt="${product.title}">
+                    <img src="${imageUrl}" alt="${product.title}" onerror="this.src='https://via.placeholder.com/400x300/4a7043/ffffff?text=图片加载失败'">
                 </div>
                 <div class="product-info">
                     <h3 class="product-title">${product.title}</h3>
@@ -539,7 +561,8 @@ class ProductManager {
                     </div>
                 </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
         
         // 绑定产品卡片事件
         this.bindProductEvents();
@@ -616,9 +639,28 @@ class ProductManager {
         const buyNowBtn = modal.querySelector('.buy-now-btn');
         const addToCartBtn = modal.querySelector('.detail-add-to-cart-btn');
         
+        // 确保图片URL是有效的
+        let imageUrl = product.imageUrl;
+        if (imageUrl && (imageUrl.includes('${window.demoProductImages') || !imageUrl.startsWith('http') && !imageUrl.startsWith('img/'))) {
+            let index = 0;
+            const idMatch = product.id.match(/(\d+)/);
+            if (idMatch && idMatch[1]) {
+                index = Math.min(parseInt(idMatch[1]) - 1, 7);
+            }
+            
+            if (window.demoProductImages && window.demoProductImages[index]) {
+                imageUrl = window.demoProductImages[index];
+            } else {
+                imageUrl = `https://via.placeholder.com/400x300/4a7043/ffffff?text=${encodeURIComponent(product.title || '渔具')}`;
+            }
+        }
+        
         // 设置详情内容
-        imageElement.src = product.imageUrl;
+        imageElement.src = imageUrl;
         imageElement.alt = product.title;
+        imageElement.onerror = function() {
+            this.src = 'https://via.placeholder.com/400x300/4a7043/ffffff?text=图片加载失败';
+        };
         titleElement.textContent = product.title;
         priceElement.innerHTML = `¥${product.price} <small><del>¥${product.originalPrice || (parseFloat(product.price) * 1.2).toFixed(2)}</del></small>`;
         descElement.textContent = product.description;
