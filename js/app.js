@@ -607,56 +607,110 @@ class ProductManager {
     
     // 显示产品详情
     showProductDetails(product) {
+        // 获取模态框元素
         const modal = document.querySelector('.product-detail-modal');
-        
-        if (!modal) return;
-        
-        // 填充产品详情
         const imageElement = modal.querySelector('.product-detail-image img');
         const titleElement = modal.querySelector('.product-detail-title');
         const priceElement = modal.querySelector('.product-detail-price');
         const descElement = modal.querySelector('.product-detail-desc');
-        const buyButton = modal.querySelector('.buy-now-btn');
-        const addToCartButton = modal.querySelector('.detail-add-to-cart-btn');
+        const buyNowBtn = modal.querySelector('.buy-now-btn');
+        const addToCartBtn = modal.querySelector('.detail-add-to-cart-btn');
         
+        // 设置详情内容
         imageElement.src = product.imageUrl;
         imageElement.alt = product.title;
         titleElement.textContent = product.title;
-        priceElement.innerHTML = `¥${product.price} ${product.originalPrice ? `<span class="original-price">¥${product.originalPrice}</span>` : ''}`;
+        priceElement.innerHTML = `¥${product.price} <small><del>¥${product.originalPrice || (parseFloat(product.price) * 1.2).toFixed(2)}</del></small>`;
         descElement.textContent = product.description;
         
-        // 更新按钮文本
-        buyButton.textContent = '立即购买';
-        
-        // 绑定按钮事件
-        buyButton.onclick = () => {
-            // 关闭产品详情模态框
-            modal.classList.remove('active');
+        // 添加支付方式和收款码对定制串钩的特殊处理
+        let paymentInfo = '';
+        if (product.id === 'custom-hooks-001') {
+            paymentInfo = `
+                <div class="payment-methods">
+                    <h4>支付方式</h4>
+                    <div class="payment-options">
+                        <div class="payment-option">
+                            <input type="radio" id="alipay" name="payment" value="alipay" checked>
+                            <label for="alipay">支付宝</label>
+                        </div>
+                        <div class="payment-option">
+                            <input type="radio" id="wechat" name="payment" value="wechat">
+                            <label for="wechat">微信支付</label>
+                        </div>
+                    </div>
+                    <div class="payment-qrcode">
+                        <div class="qrcode-container alipay-qrcode active">
+                            <img src="img/alipay-qrcode.jpg" alt="支付宝收款码">
+                            <p>请使用支付宝扫码支付</p>
+                        </div>
+                        <div class="qrcode-container wechat-qrcode">
+                            <img src="img/wechat-qrcode.jpg" alt="微信收款码">
+                            <p>请使用微信扫码支付</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            descElement.insertAdjacentHTML('afterend', paymentInfo);
             
-            // 显示抖音分享模态框
-            this.showDouyinShareModal(product);
+            // 绑定支付方式切换事件
+            setTimeout(() => {
+                const alipayRadio = modal.querySelector('#alipay');
+                const wechatRadio = modal.querySelector('#wechat');
+                const alipayQrcode = modal.querySelector('.alipay-qrcode');
+                const wechatQrcode = modal.querySelector('.wechat-qrcode');
+                
+                alipayRadio.addEventListener('change', () => {
+                    alipayQrcode.classList.add('active');
+                    wechatQrcode.classList.remove('active');
+                });
+                
+                wechatRadio.addEventListener('change', () => {
+                    wechatQrcode.classList.add('active');
+                    alipayQrcode.classList.remove('active');
+                });
+            }, 100);
+        }
+        
+        // 为按钮绑定事件
+        buyNowBtn.onclick = () => {
+            if (product.id === 'custom-hooks-001') {
+                this.showMessage('请通过上方二维码直接支付', 'info');
+            } else {
+                this.showDouyinShareModal(product);
+            }
+            modal.classList.remove('active');
         };
         
-        addToCartButton.onclick = () => {
+        addToCartBtn.onclick = () => {
             app.cart.addItem(product);
-            modal.classList.remove('active');
         };
         
         // 显示模态框
         modal.classList.add('active');
         
-        // 绑定关闭按钮
-        const closeButton = modal.querySelector('.close-modal');
-        closeButton.onclick = () => {
+        // 绑定关闭事件
+        const closeBtn = modal.querySelector('.close-modal');
+        closeBtn.onclick = () => {
             modal.classList.remove('active');
+            // 移除支付方式元素(如果存在)
+            const paymentMethods = modal.querySelector('.payment-methods');
+            if (paymentMethods) {
+                paymentMethods.remove();
+            }
         };
         
         // 点击模态框背景关闭
-        modal.addEventListener('click', e => {
+        modal.onclick = (e) => {
             if (e.target === modal) {
                 modal.classList.remove('active');
+                // 移除支付方式元素(如果存在)
+                const paymentMethods = modal.querySelector('.payment-methods');
+                if (paymentMethods) {
+                    paymentMethods.remove();
+                }
             }
-        });
+        };
     }
     
     // 保留阿里巴巴一键代发功能供后台使用

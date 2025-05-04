@@ -61,6 +61,17 @@ document.addEventListener('DOMContentLoaded', () => {
 // 为了防止跨域问题，当抖音API调用失败时，可以使用这个JSON作为备用数据
 window.fallbackProductsJson = `[
     {
+        "id": "custom-hooks-001",
+        "title": "程老板定制串钩",
+        "price": "5.00",
+        "originalPrice": "8.00",
+        "imageUrl": "https://via.placeholder.com/400x300/e63946/ffffff?text=定制串钩",
+        "detailUrl": "#",
+        "sales": "268",
+        "category": "配件",
+        "description": "程老板专用定制串钩，适合黄辣丁、小鲶鱼等运河野钓，高强度耐用，售价5元/付。"
+    },
+    {
         "id": "raft-rod-001",
         "title": "2.1米野钓筏竿",
         "price": "168.00",
