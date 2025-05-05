@@ -704,66 +704,41 @@ class ProductManager {
         imageElement.alt = product.title || product.name;
         titleElement.textContent = product.title || product.name;
         priceElement.innerHTML = `¥${product.price} <small><del>¥${product.originalPrice || (parseFloat(product.price) * 1.2).toFixed(2)}</del></small>`;
-        descElement.textContent = product.description || '';
         
-        // 添加支付方式和收款码
-        let paymentInfo = '';
-        if (product.id === 'custom-hooks') {
-            paymentInfo = `
-                <div class="payment-methods">
-                    <h4>支付方式</h4>
-                    <div class="payment-options">
-                        <div class="payment-option">
-                            <input type="radio" id="alipay" name="payment" value="alipay" checked>
-                            <label for="alipay">支付宝</label>
-                        </div>
-                        <div class="payment-option">
-                            <input type="radio" id="wechat" name="payment" value="wechat">
-                            <label for="wechat">微信支付</label>
-                        </div>
-                    </div>
-                    <div class="payment-qrcode">
-                        <div class="qrcode-container alipay-qrcode active">
-                            <img src="img/alipay-qrcode.jpg" alt="支付宝收款码" onerror="this.src='https://via.placeholder.com/300x300/108ee9/ffffff?text=支付宝收款码'">
-                            <p>请使用支付宝扫码支付</p>
-                        </div>
-                        <div class="qrcode-container wechat-qrcode">
-                            <img src="img/wechat-qrcode.jpg" alt="微信收款码" onerror="this.src='https://via.placeholder.com/300x300/09bb07/ffffff?text=微信收款码'">
-                            <p>请使用微信扫码支付</p>
-                        </div>
+        // 产品描述和介绍图
+        let productDescription = product.description || '';
+        let productContentHtml = '';
+        
+        // 添加产品介绍图
+        if (product.detailImages && product.detailImages.length > 0) {
+            productContentHtml = `
+                <div class="product-detail-images">
+                    ${product.detailImages.map(img => `<img src="${img}" alt="${product.title}" class="detail-img">`).join('')}
+                </div>
+            `;
+        } else {
+            // 如果没有详情图，添加一些默认的详情HTML
+            productContentHtml = `
+                <div class="product-detail-images">
+                    <img src="${imageUrl}" alt="${product.title}" class="detail-img">
+                    <div class="product-features">
+                        <h4>产品特点</h4>
+                        <ul>
+                            <li>高品质材料，坚固耐用</li>
+                            <li>专业设计，性能卓越</li>
+                            <li>适合各种钓鱼场景</li>
+                            <li>性价比高，物超所值</li>
+                        </ul>
                     </div>
                 </div>
             `;
-            
-            // 先移除旧的支付方式元素(如果存在)
-            const oldPayment = modal.querySelector('.payment-methods');
-            if (oldPayment) {
-                oldPayment.remove();
-            }
-            
-            // 添加新的支付方式元素
-            descElement.insertAdjacentHTML('afterend', paymentInfo);
-            
-            // 绑定支付方式切换事件
-            setTimeout(() => {
-                const alipayRadio = modal.querySelector('#alipay');
-                const wechatRadio = modal.querySelector('#wechat');
-                const alipayQrcode = modal.querySelector('.alipay-qrcode');
-                const wechatQrcode = modal.querySelector('.wechat-qrcode');
-                
-                if (alipayRadio && wechatRadio) {
-                    alipayRadio.addEventListener('change', () => {
-                        alipayQrcode.classList.add('active');
-                        wechatQrcode.classList.remove('active');
-                    });
-                    
-                    wechatRadio.addEventListener('change', () => {
-                        wechatQrcode.classList.add('active');
-                        alipayQrcode.classList.remove('active');
-                    });
-                }
-            }, 100);
         }
+        
+        // 设置详情内容
+        descElement.innerHTML = `
+            <p>${productDescription}</p>
+            ${productContentHtml}
+        `;
         
         // 为按钮绑定事件
         buyNowBtn.onclick = () => {
@@ -783,22 +758,12 @@ class ProductManager {
         const closeBtn = modal.querySelector('.close-modal');
         closeBtn.onclick = () => {
             modal.classList.remove('active');
-            // 移除支付方式元素(如果存在)
-            const paymentMethods = modal.querySelector('.payment-methods');
-            if (paymentMethods) {
-                paymentMethods.remove();
-            }
         };
         
         // 点击模态框背景关闭
         modal.addEventListener('click', e => {
             if (e.target === modal) {
                 modal.classList.remove('active');
-                // 移除支付方式元素(如果存在)
-                const paymentMethods = modal.querySelector('.payment-methods');
-                if (paymentMethods) {
-                    paymentMethods.remove();
-                }
             }
         });
     }
@@ -817,9 +782,17 @@ class ProductManager {
                 <div class="modal-content">
                     <span class="close-modal">&times;</span>
                     <div class="container">
-                        <h2>付款金额</h2>
-                        <div class="price">¥${price}</div>
-                        <p class="tips">请在支付时备注订单号：<span id="orderId">${orderId}</span></p>
+                        <nav>
+                            <a href="index.html">首页</a>
+                            <a href="#">支付页面</a>
+                            <a href="contact-admin.html">联系我们</a>
+                        </nav>
+                        <h2>订单支付</h2>
+                        <div class="info-box">
+                            <p>购买商品：<span id="itemName">${product.title || product.name}</span></p>
+                            <p>付款金额：<span id="itemPrice" class="price">¥${price}</span></p>
+                            <p>订单号：<span id="orderId">${orderId}</span></p>
+                        </div>
                         <p class="timer">支付倒计时：<span id="timer">15:00</span></p>
 
                         <div class="payment-method">
@@ -828,10 +801,9 @@ class ProductManager {
                         </div>
 
                         <div class="qrcode" id="qrcode">
-                            <!-- 默认显示微信收款码 -->
                             <img src="img/wechat-qrcode.jpg" alt="微信收款二维码" width="200" onerror="this.src='https://via.placeholder.com/200x200/09bb07/ffffff?text=微信收款码'">
                         </div>
-                        <p class="tips">请使用对应应用扫描二维码，手动输入金额 ¥${price}</p>
+                        <p class="tips">请打开对应应用，扫描二维码支付<br>手动输入金额 <span id="amountText">¥${price}</span>，并备注订单号</p>
 
                         <button class="confirm-btn" id="confirmPaymentBtn">我已完成支付</button>
                     </div>
@@ -843,6 +815,36 @@ class ProductManager {
         const modalElement = document.createElement('div');
         modalElement.innerHTML = modalHtml;
         document.body.appendChild(modalElement.firstElementChild);
+        
+        // 添加样式
+        const styleElement = document.createElement('style');
+        styleElement.textContent = `
+            .payment-page-modal .container { max-width: 400px; margin: 20px auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+            .payment-page-modal nav { background: #1e88e5; padding: 10px; text-align: center; }
+            .payment-page-modal nav a { color: #fff; margin: 0 15px; text-decoration: none; font-size: 16px; }
+            .payment-page-modal nav a:hover { text-decoration: underline; }
+            .payment-page-modal h2 { color: #1e88e5; font-size: 24px; margin-bottom: 10px; }
+            .payment-page-modal .price { font-size: 28px; font-weight: bold; color: #e53935; margin: 10px 0; }
+            .payment-page-modal .info-box { background: #f5f5f5; padding: 10px; border-radius: 5px; margin: 10px 0; }
+            .payment-page-modal .info-box p { margin: 5px 0; color: #555; font-size: 14px; }
+            .payment-page-modal .payment-method { display: flex; justify-content: center; gap: 10px; margin: 15px 0; }
+            .payment-page-modal .payment-method button { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background 0.3s; }
+            .payment-page-modal .payment-method .active { background: #1e88e5; color: #fff; }
+            .payment-page-modal .payment-method .inactive { background: #ddd; color: #333; }
+            .payment-page-modal .qrcode { margin: 20px 0; text-align: center; }
+            .payment-page-modal .qrcode img { border: 2px solid #ddd; border-radius: 5px; max-width: 200px; }
+            .payment-page-modal .tips { color: #666; font-size: 14px; margin: 10px 0; text-align: center; }
+            .payment-page-modal .confirm-btn { background: #43a047; color: #fff; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px; width: 100%; transition: background 0.3s; }
+            .payment-page-modal .confirm-btn:hover { background: #388e3c; }
+            .payment-page-modal .confirm-btn:disabled { background: #ccc; cursor: not-allowed; }
+            .payment-page-modal .timer { font-size: 14px; color: #e53935; margin: 10px 0; }
+            @media (max-width: 600px) {
+                .payment-page-modal .container { margin: 10px; padding: 15px; }
+                .payment-page-modal .payment-method { flex-direction: column; gap: 5px; }
+                .payment-page-modal .payment-method button { width: 100%; }
+            }
+        `;
+        document.head.appendChild(styleElement);
         
         // 获取创建的元素
         const modal = document.querySelector('.payment-page-modal');
@@ -889,9 +891,11 @@ class ProductManager {
         confirmBtn.addEventListener('click', () => {
             if (confirm("您确认已完成支付吗？")) {
                 clearInterval(countdown);
-                // 跳转到联系管理员页面
-                window.location.href = "contact-admin.html";
+                // 关闭支付模态框
                 document.body.removeChild(modal);
+                document.head.removeChild(styleElement);
+                // 创建联系管理员页面
+                this.createContactAdminPage();
             }
         });
         
@@ -899,6 +903,7 @@ class ProductManager {
         closeBtn.addEventListener('click', () => {
             clearInterval(countdown);
             document.body.removeChild(modal);
+            document.head.removeChild(styleElement);
         });
         
         // 点击背景关闭
@@ -906,157 +911,70 @@ class ProductManager {
             if (e.target === modal) {
                 clearInterval(countdown);
                 document.body.removeChild(modal);
+                document.head.removeChild(styleElement);
             }
         });
     }
     
-    // 保留阿里巴巴一键代发功能供后台使用
-    showAlibabaModal(product) {
-        // 创建阿里巴巴代发模态框
-        const modalHtml = `
-            <div class="alibaba-modal modal active">
-                <div class="modal-content">
-                    <span class="close-modal">&times;</span>
-                    <div class="alibaba-container">
-                        <h3>阿里巴巴一键代发</h3>
-                        <div class="product-brief">
-                            <img src="${product.imageUrl}" alt="${product.title}">
-                            <div class="brief-info">
-                                <h4>${product.title}</h4>
-                                <p class="brief-price">¥${product.price}</p>
-                            </div>
-                        </div>
-                        <div class="alibaba-options">
-                            <div class="option-group">
-                                <label>收货人信息：</label>
-                                <div class="receiver-info">
-                                    <input type="text" placeholder="收货人姓名" class="receiver-name">
-                                    <input type="text" placeholder="收货人电话" class="receiver-phone">
-                                </div>
-                                <textarea placeholder="收货地址（省市区详细地址）" class="receiver-address"></textarea>
-                            </div>
-                            <div class="option-group">
-                                <label>代发选项：</label>
-                                <div class="delivery-options">
-                                    <div class="option">
-                                        <input type="radio" name="delivery-type" id="direct-delivery" checked>
-                                        <label for="direct-delivery">直接发货</label>
-                                    </div>
-                                    <div class="option">
-                                        <input type="radio" name="delivery-type" id="customize-package">
-                                        <label for="customize-package">定制包装</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="option-group">
-                                <label>备注信息：</label>
-                                <textarea placeholder="备注信息（选填）" class="order-note"></textarea>
-                            </div>
-                        </div>
-                        <div class="alibaba-actions">
-                            <button class="btn alibaba-submit">确认代发</button>
-                            <a href="https://s.1688.com/youyuan/index.htm?keywords=${encodeURIComponent(product.title)}" target="_blank" class="btn btn-secondary">前往阿里巴巴选购</a>
-                        </div>
-                    </div>
+    // 创建联系管理员页面
+    createContactAdminPage() {
+        const contactAdminHtml = `
+        <!DOCTYPE html>
+        <html lang="zh-CN">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>联系管理员</title>
+            <style>
+                body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background: #f5f5f5; }
+                .container { max-width: 400px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+                .tips { color: #666; font-size: 14px; margin: 10px 0; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h2>支付已提交</h2>
+                <p class="tips">感谢您的支付！请联系管理员核实订单。</p>
+                <p class="tips">管理员联系方式：<br>微信：admin-wechat-id<br>邮箱：admin@example.com</p>
+                <a href="index.html">返回支付页面</a>
+            </div>
+        </body>
+        </html>
+        `;
+        
+        // 创建一个模态框来显示联系管理员页面
+        const contactModalHtml = `
+            <div class="contact-admin-modal modal active" style="z-index: 2000;">
+                <div class="modal-content" style="width: 100%; height: 100%; max-width: none; padding: 0; overflow: hidden;">
+                    <iframe id="contact-admin-frame" style="width: 100%; height: 100%; border: none;"></iframe>
                 </div>
             </div>
         `;
         
         // 添加模态框到body
         const modalElement = document.createElement('div');
-        modalElement.innerHTML = modalHtml;
+        modalElement.innerHTML = contactModalHtml;
         document.body.appendChild(modalElement.firstElementChild);
         
-        // 获取刚创建的模态框
-        const alibabaModal = document.querySelector('.alibaba-modal');
-        const submitBtn = alibabaModal.querySelector('.alibaba-submit');
-        const closeBtn = alibabaModal.querySelector('.close-modal');
+        // 获取iframe并写入内容
+        const iframe = document.getElementById('contact-admin-frame');
+        iframe.onload = () => {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            iframeDoc.open();
+            iframeDoc.write(contactAdminHtml);
+            iframeDoc.close();
+        };
         
-        // 提交按钮功能
-        submitBtn.addEventListener('click', () => {
-            const name = alibabaModal.querySelector('.receiver-name').value;
-            const phone = alibabaModal.querySelector('.receiver-phone').value;
-            const address = alibabaModal.querySelector('.receiver-address').value;
-            
-            if (!name || !phone || !address) {
-                showMessage('请填写完整的收货信息', 'error');
-                return;
-            }
-            
-            // 这里可以添加实际的提交逻辑
-            showMessage('代发订单已提交，我们将尽快处理', 'success');
-            
-            // 关闭模态框
-            document.body.removeChild(alibabaModal);
-        });
-        
-        // 关闭按钮功能
-        closeBtn.addEventListener('click', () => {
-            document.body.removeChild(alibabaModal);
-        });
-        
-        // 点击模态框背景关闭
-        alibabaModal.addEventListener('click', e => {
-            if (e.target === alibabaModal) {
-                document.body.removeChild(alibabaModal);
-            }
-        });
+        // 创建contact-admin.html文件
+        this.createContactAdminFile(contactAdminHtml);
     }
     
-    // 显示抖音分享模态框
-    showDouyinShareModal(product) {
-        // 抖音分享口令
-        const douyinShareCode = "在这里填入你的抖音店铺分享口令";
-        
-        // 创建抖音分享模态框
-        const modalHtml = `
-            <div class="douyin-share-modal modal active">
-                <div class="modal-content">
-                    <span class="close-modal">&times;</span>
-                    <div class="douyin-share-container">
-                        <h3>前往抖音购买 ${product.title}</h3>
-                        <p class="share-instructions">请复制下方口令，打开抖音APP粘贴使用：</p>
-                        <div class="share-code-container">
-                            <textarea class="share-code" readonly>${douyinShareCode}</textarea>
-                        </div>
-                        <div class="share-actions">
-                            <button class="btn copy-btn">复制口令</button>
-                            <a href="${product.detailUrl}" target="_blank" class="btn btn-secondary">直接前往抖音</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        // 添加模态框到body
-        const modalElement = document.createElement('div');
-        modalElement.innerHTML = modalHtml;
-        document.body.appendChild(modalElement.firstElementChild);
-        
-        // 获取刚创建的模态框
-        const shareModal = document.querySelector('.douyin-share-modal');
-        const copyBtn = shareModal.querySelector('.copy-btn');
-        const shareCode = shareModal.querySelector('.share-code');
-        const closeBtn = shareModal.querySelector('.close-modal');
-        
-        // 复制按钮功能
-        copyBtn.addEventListener('click', () => {
-            shareCode.select();
-            document.execCommand('copy');
-            showMessage('抖音口令已复制，请打开抖音APP粘贴使用');
-        });
-        
-        // 关闭按钮功能
-        closeBtn.addEventListener('click', () => {
-            document.body.removeChild(shareModal);
-        });
-        
-        // 点击模态框背景关闭
-        shareModal.addEventListener('click', e => {
-            if (e.target === shareModal) {
-                document.body.removeChild(shareModal);
-            }
-        });
+    // 创建contact-admin.html文件
+    createContactAdminFile(html) {
+        // 这个函数在浏览器端无法直接创建文件
+        // 实际应用中需要通过后端接口或其他方式创建文件
+        console.log('需要创建contact-admin.html文件');
+        // 这里只是模拟，实际实现需要根据您的服务器环境来处理
     }
     
     // 绑定过滤和排序事件
