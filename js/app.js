@@ -861,7 +861,19 @@ class ProductManager {
             wechatBtn.classList.add('active');
             alipayBtn.classList.remove('active');
             alipayBtn.classList.add('inactive');
-            qrcodeDiv.innerHTML = '<img src="img/wechat-qrcode.jpg" alt="微信收款二维码" width="200" onerror="this.src=\'https://via.placeholder.com/200x200/09bb07/ffffff?text=微信收款码\'">';
+            qrcodeDiv.innerHTML = `
+                <div style="border: 2px solid #09bb07; padding: 10px; background: #f8f8f8; border-radius: 5px; display: inline-block;">
+                    <h3 style="color: #09bb07; margin: 5px 0;">微信支付</h3>
+                    <div style="width: 200px; height: 200px; background: #09bb07; display: flex; justify-content: center; align-items: center; color: white; font-size: 14px; padding: 10px; box-sizing: border-box; text-align: center;">
+                        <!-- 创建一个模拟的微信支付二维码 -->
+                        <div>
+                            <div style="font-size: 24px; margin-bottom: 10px;">扫描支付</div>
+                            <div>金额: ¥${price}</div>
+                            <div>订单号: ${orderId}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
         });
 
         alipayBtn.addEventListener('click', () => {
@@ -869,7 +881,19 @@ class ProductManager {
             alipayBtn.classList.add('active');
             wechatBtn.classList.remove('active');
             wechatBtn.classList.add('inactive');
-            qrcodeDiv.innerHTML = '<img src="img/alipay-qrcode.jpg" alt="支付宝收款二维码" width="200" onerror="this.src=\'https://via.placeholder.com/200x200/108ee9/ffffff?text=支付宝收款码\'">';
+            qrcodeDiv.innerHTML = `
+                <div style="border: 2px solid #108ee9; padding: 10px; background: #f8f8f8; border-radius: 5px; display: inline-block;">
+                    <h3 style="color: #108ee9; margin: 5px 0;">支付宝</h3>
+                    <div style="width: 200px; height: 200px; background: #108ee9; display: flex; justify-content: center; align-items: center; color: white; font-size: 14px; padding: 10px; box-sizing: border-box; text-align: center;">
+                        <!-- 创建一个模拟的支付宝二维码 -->
+                        <div>
+                            <div style="font-size: 24px; margin-bottom: 10px;">扫描支付</div>
+                            <div>金额: ¥${price}</div>
+                            <div>订单号: ${orderId}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
         });
         
         // 支付倒计时（15分钟）
