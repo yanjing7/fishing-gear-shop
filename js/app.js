@@ -877,7 +877,7 @@ class ProductManager {
                 </div>
                 <div class="qrcode-body" style="border:1px solid #ddd; border-top:none; padding:15px; border-radius:0 0 8px 8px; background:white;">
                     <div class="qrcode-image" style="width:200px; height:200px; margin:0 auto;">
-                        <img src="img/2ea99c20420887234ddb0027f2c3ece.jpg" alt="支付宝支付二维码" style="width:100%; height:100%;">
+                        <img src="img/377f025a20020c57534c4d8ebc6d9ab.jpg" alt="支付宝支付二维码" style="width:100%; height:100%;">
                     </div>
                     <div class="qrcode-info" style="margin-top:10px; font-size:14px; color:#333;">
                         <p style="margin:5px 0;">订单号: ${orderId}</p>
