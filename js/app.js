@@ -778,26 +778,18 @@ class ProductManager {
         
         // 创建微信支付二维码HTML
         const wechatQRcodeHTML = `
-        <div style="border: 3px solid #09bb07; padding: 15px; background: #fff; border-radius: 8px; display: inline-block; margin: 0 auto;">
-            <div style="text-align: center; margin-bottom: 10px;">
-                <h3 style="color: #09bb07; margin: 0; font-size: 18px; font-weight: bold;">微信支付</h3>
-                <p style="color: #666; font-size: 12px; margin: 5px 0 0;">推荐使用微信支付</p>
+        <div class="payment-qrcode-wrapper" style="text-align:center;">
+            <div class="qrcode-header" style="background:#09bb07; color:white; padding:10px 0; border-radius:8px 8px 0 0;">
+                <h3 style="margin:0; font-size:16px;">微信扫码支付</h3>
             </div>
-            <div style="width: 200px; height: 200px; background: #fff; position: relative; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
-                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto; width: 180px; height: 180px; background: #fff; display: flex; justify-content: center; align-items: center; flex-direction: column;">
-                    <div style="width: 150px; height: 150px; background: #09bb07; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; color: white; text-align: center;">
-                        <div>
-                            <div style="font-size: 24px; margin-bottom: 10px;">扫一扫</div>
-                            <div style="font-size: 14px; line-height: 1.5;">
-                                <div>程老板来烤全羊(*磊)</div>
-                                <div style="margin-top: 5px;">¥${price}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="margin-top: 5px; width: 120px;">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%2309bb07' d='M8.9 16.1c-.3 0-.6-.1-.8-.2-1-.8-1.3-1.1-1.8-2C4.5 12.9 3 11 3 8.9 3 5.5 6.5 3 10 3s7 2.5 7 5.9c0 3.4-3.5 5.9-7 5.9-.5 0-1.1-.1-1.8-.4-.7-.2-1-.4-1-.5-.2.2-.6.5-.9.7C6 15 5.6 16.1 5.6 16.1c-.2 0-.3-.1-.2-.2C5.4 15.9 6 15 6 15c.1-.1.2-.2.3-.3.8-1 1-1.2 1.7-2.1.1-.2 0-.3-.1-.3s-.3.1-.5.2c-1 .6-1.9.9-3 .9-2 0-3.7-1.3-3.7-2.9 0-1.6 1.7-2.9 3.7-2.9.8 0 1.7.2 2.4.6.2-.2.9-1.2 1.6-1.6C9.3 5.2 10.7 5 12 5c2.9 0 5.3 1.7 5.3 3.9 0 2.1-2.4 3.9-5.3 3.9-.6 0-1.2-.1-1.8-.3-.3.5-.8 1.8-1.3 3.6z'/%3E%3C/svg%3E" style="width: 20px; vertical-align: middle;">
-                        <span style="font-size: 12px; color: #888; vertical-align: middle;">微信支付</span>
-                    </div>
+            <div class="qrcode-body" style="border:1px solid #ddd; border-top:none; padding:15px; border-radius:0 0 8px 8px; background:white;">
+                <div class="qrcode-image" style="width:200px; height:200px; margin:0 auto; position:relative; background:#fff; border:1px solid #e0e0e0;">
+                    <div style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto; width:170px; height:170px; background:url('data:image/png;base64,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'); background-size:cover;"></div>
+                </div>
+                <div class="qrcode-info" style="margin-top:10px; font-size:14px; color:#333;">
+                    <p style="margin:5px 0;">订单号: ${orderId}</p>
+                    <p style="margin:5px 0; font-weight:bold; color:#E64340;">¥${price}</p>
+                    <p style="margin:5px 0; font-size:12px; color:#999;">打开微信扫一扫，扫描二维码完成支付</p>
                 </div>
             </div>
         </div>
@@ -805,26 +797,18 @@ class ProductManager {
         
         // 创建支付宝二维码HTML
         const alipayQRcodeHTML = `
-        <div style="border: 3px solid #108ee9; padding: 15px; background: #fff; border-radius: 8px; display: inline-block; margin: 0 auto;">
-            <div style="text-align: center; margin-bottom: 10px;">
-                <h3 style="color: #108ee9; margin: 0; font-size: 18px; font-weight: bold;">支付宝</h3>
-                <p style="color: #666; font-size: 12px; margin: 5px 0 0;">使用支付宝扫码支付</p>
+        <div class="payment-qrcode-wrapper" style="text-align:center;">
+            <div class="qrcode-header" style="background:#108ee9; color:white; padding:10px 0; border-radius:8px 8px 0 0;">
+                <h3 style="margin:0; font-size:16px;">支付宝扫码支付</h3>
             </div>
-            <div style="width: 200px; height: 200px; background: #fff; position: relative; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
-                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto; width: 180px; height: 180px; background: #fff; display: flex; justify-content: center; align-items: center; flex-direction: column;">
-                    <div style="width: 150px; height: 150px; background: #108ee9; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; color: white; text-align: center;">
-                        <div>
-                            <div style="font-size: 24px; margin-bottom: 10px;">扫一扫</div>
-                            <div style="font-size: 14px; line-height: 1.5;">
-                                <div>*磊</div>
-                                <div style="margin-top: 5px;">¥${price}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div style="margin-top: 5px; width: 120px;">
-                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23108ee9' d='M15.4 6.1H5c-.5 0-1 .4-1 1v6c0 .5.4 1 1 1h10.5c.5 0 1-.4 1-1v-6c0-.6-.5-1-1.1-1zm-5.3 6.2c-1.4 0-2.6-1.2-2.6-2.6s1.2-2.6 2.6-2.6 2.6 1.2 2.6 2.6-1.2 2.6-2.6 2.6zm1.9-2.6c0 1-.8 1.9-1.9 1.9-1 0-1.9-.8-1.9-1.9 0-1 .8-1.9 1.9-1.9s1.9.9 1.9 1.9z'/%3E%3C/svg%3E" style="width: 20px; vertical-align: middle;">
-                        <span style="font-size: 12px; color: #888; vertical-align: middle;">支付宝</span>
-                    </div>
+            <div class="qrcode-body" style="border:1px solid #ddd; border-top:none; padding:15px; border-radius:0 0 8px 8px; background:white;">
+                <div class="qrcode-image" style="width:200px; height:200px; margin:0 auto; position:relative; background:#fff; border:1px solid #e0e0e0;">
+                    <div style="position:absolute; top:0; left:0; right:0; bottom:0; margin:auto; width:170px; height:170px; background:url('data:image/png;base64,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'); background-size:cover;"></div>
+                </div>
+                <div class="qrcode-info" style="margin-top:10px; font-size:14px; color:#333;">
+                    <p style="margin:5px 0;">订单号: ${orderId}</p>
+                    <p style="margin:5px 0; font-weight:bold; color:#108ee9;">¥${price}</p>
+                    <p style="margin:5px 0; font-size:12px; color:#999;">打开支付宝扫一扫，扫描二维码完成支付</p>
                 </div>
             </div>
         </div>
