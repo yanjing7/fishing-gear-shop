@@ -776,6 +776,60 @@ class ProductManager {
         // 创建随机订单号
         const orderId = `ORDER-${Math.floor(Math.random() * 1000000)}`;
         
+        // 创建微信支付二维码HTML
+        const wechatQRcodeHTML = `
+        <div style="border: 3px solid #09bb07; padding: 15px; background: #fff; border-radius: 8px; display: inline-block; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 10px;">
+                <h3 style="color: #09bb07; margin: 0; font-size: 18px; font-weight: bold;">微信支付</h3>
+                <p style="color: #666; font-size: 12px; margin: 5px 0 0;">推荐使用微信支付</p>
+            </div>
+            <div style="width: 200px; height: 200px; background: #fff; position: relative; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto; width: 180px; height: 180px; background: #fff; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                    <div style="width: 150px; height: 150px; background: #09bb07; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; color: white; text-align: center;">
+                        <div>
+                            <div style="font-size: 24px; margin-bottom: 10px;">扫一扫</div>
+                            <div style="font-size: 14px; line-height: 1.5;">
+                                <div>程老板来烤全羊(*磊)</div>
+                                <div style="margin-top: 5px;">¥${price}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 5px; width: 120px;">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%2309bb07' d='M8.9 16.1c-.3 0-.6-.1-.8-.2-1-.8-1.3-1.1-1.8-2C4.5 12.9 3 11 3 8.9 3 5.5 6.5 3 10 3s7 2.5 7 5.9c0 3.4-3.5 5.9-7 5.9-.5 0-1.1-.1-1.8-.4-.7-.2-1-.4-1-.5-.2.2-.6.5-.9.7C6 15 5.6 16.1 5.6 16.1c-.2 0-.3-.1-.2-.2C5.4 15.9 6 15 6 15c.1-.1.2-.2.3-.3.8-1 1-1.2 1.7-2.1.1-.2 0-.3-.1-.3s-.3.1-.5.2c-1 .6-1.9.9-3 .9-2 0-3.7-1.3-3.7-2.9 0-1.6 1.7-2.9 3.7-2.9.8 0 1.7.2 2.4.6.2-.2.9-1.2 1.6-1.6C9.3 5.2 10.7 5 12 5c2.9 0 5.3 1.7 5.3 3.9 0 2.1-2.4 3.9-5.3 3.9-.6 0-1.2-.1-1.8-.3-.3.5-.8 1.8-1.3 3.6z'/%3E%3C/svg%3E" style="width: 20px; vertical-align: middle;">
+                        <span style="font-size: 12px; color: #888; vertical-align: middle;">微信支付</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+        
+        // 创建支付宝二维码HTML
+        const alipayQRcodeHTML = `
+        <div style="border: 3px solid #108ee9; padding: 15px; background: #fff; border-radius: 8px; display: inline-block; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 10px;">
+                <h3 style="color: #108ee9; margin: 0; font-size: 18px; font-weight: bold;">支付宝</h3>
+                <p style="color: #666; font-size: 12px; margin: 5px 0 0;">使用支付宝扫码支付</p>
+            </div>
+            <div style="width: 200px; height: 200px; background: #fff; position: relative; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
+                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto; width: 180px; height: 180px; background: #fff; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                    <div style="width: 150px; height: 150px; background: #108ee9; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; color: white; text-align: center;">
+                        <div>
+                            <div style="font-size: 24px; margin-bottom: 10px;">扫一扫</div>
+                            <div style="font-size: 14px; line-height: 1.5;">
+                                <div>*磊</div>
+                                <div style="margin-top: 5px;">¥${price}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 5px; width: 120px;">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23108ee9' d='M15.4 6.1H5c-.5 0-1 .4-1 1v6c0 .5.4 1 1 1h10.5c.5 0 1-.4 1-1v-6c0-.6-.5-1-1.1-1zm-5.3 6.2c-1.4 0-2.6-1.2-2.6-2.6s1.2-2.6 2.6-2.6 2.6 1.2 2.6 2.6-1.2 2.6-2.6 2.6zm1.9-2.6c0 1-.8 1.9-1.9 1.9-1 0-1.9-.8-1.9-1.9 0-1 .8-1.9 1.9-1.9s1.9.9 1.9 1.9z'/%3E%3C/svg%3E" style="width: 20px; vertical-align: middle;">
+                        <span style="font-size: 12px; color: #888; vertical-align: middle;">支付宝</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+        
         // 创建支付页面模态框
         const modalHtml = `
             <div class="payment-page-modal modal active">
@@ -801,7 +855,7 @@ class ProductManager {
                         </div>
 
                         <div class="qrcode" id="qrcode">
-                            <img src="img/wechat-qrcode.jpg" alt="微信收款二维码" width="200" onerror="this.src='https://via.placeholder.com/200x200/09bb07/ffffff?text=微信收款码'">
+                            ${wechatQRcodeHTML}
                         </div>
                         <p class="tips">请打开对应应用，扫描二维码支付<br>手动输入金额 <span id="amountText">¥${price}</span>，并备注订单号</p>
 
@@ -861,33 +915,7 @@ class ProductManager {
             wechatBtn.classList.add('active');
             alipayBtn.classList.remove('active');
             alipayBtn.classList.add('inactive');
-            
-            // 使用完全内联的HTML/CSS创建微信二维码显示
-            qrcodeDiv.innerHTML = `
-                <div style="border: 3px solid #09bb07; padding: 15px; background: #fff; border-radius: 8px; display: inline-block; margin: 0 auto;">
-                    <div style="text-align: center; margin-bottom: 10px;">
-                        <h3 style="color: #09bb07; margin: 0; font-size: 18px; font-weight: bold;">微信支付</h3>
-                        <p style="color: #666; font-size: 12px; margin: 5px 0 0;">推荐使用微信支付</p>
-                    </div>
-                    <div style="width: 200px; height: 200px; background: #fff; position: relative; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
-                        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto; width: 180px; height: 180px; background: #fff; display: flex; justify-content: center; align-items: center; flex-direction: column;">
-                            <div style="width: 150px; height: 150px; background: #09bb07; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; color: white; text-align: center;">
-                                <div>
-                                    <div style="font-size: 24px; margin-bottom: 10px;">扫一扫</div>
-                                    <div style="font-size: 14px; line-height: 1.5;">
-                                        <div>程老板来烤全羊(*磊)</div>
-                                        <div style="margin-top: 5px;">¥${price}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="margin-top: 5px; width: 120px;">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%2309bb07' d='M8.9 16.1c-.3 0-.6-.1-.8-.2-1-.8-1.3-1.1-1.8-2C4.5 12.9 3 11 3 8.9 3 5.5 6.5 3 10 3s7 2.5 7 5.9c0 3.4-3.5 5.9-7 5.9-.5 0-1.1-.1-1.8-.4-.7-.2-1-.4-1-.5-.2.2-.6.5-.9.7C6 15 5.6 16.1 5.6 16.1c-.2 0-.3-.1-.2-.2C5.4 15.9 6 15 6 15c.1-.1.2-.2.3-.3.8-1 1-1.2 1.7-2.1.1-.2 0-.3-.1-.3s-.3.1-.5.2c-1 .6-1.9.9-3 .9-2 0-3.7-1.3-3.7-2.9 0-1.6 1.7-2.9 3.7-2.9.8 0 1.7.2 2.4.6.2-.2.9-1.2 1.6-1.6C9.3 5.2 10.7 5 12 5c2.9 0 5.3 1.7 5.3 3.9 0 2.1-2.4 3.9-5.3 3.9-.6 0-1.2-.1-1.8-.3-.3.5-.8 1.8-1.3 3.6z'/%3E%3C/svg%3E" style="width: 20px; vertical-align: middle;">
-                                <span style="font-size: 12px; color: #888; vertical-align: middle;">微信支付</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
+            qrcodeDiv.innerHTML = wechatQRcodeHTML;
         });
 
         alipayBtn.addEventListener('click', () => {
@@ -895,33 +923,7 @@ class ProductManager {
             alipayBtn.classList.add('active');
             wechatBtn.classList.remove('active');
             wechatBtn.classList.add('inactive');
-            
-            // 使用完全内联的HTML/CSS创建支付宝二维码显示
-            qrcodeDiv.innerHTML = `
-                <div style="border: 3px solid #108ee9; padding: 15px; background: #fff; border-radius: 8px; display: inline-block; margin: 0 auto;">
-                    <div style="text-align: center; margin-bottom: 10px;">
-                        <h3 style="color: #108ee9; margin: 0; font-size: 18px; font-weight: bold;">支付宝</h3>
-                        <p style="color: #666; font-size: 12px; margin: 5px 0 0;">使用支付宝扫码支付</p>
-                    </div>
-                    <div style="width: 200px; height: 200px; background: #fff; position: relative; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
-                        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; margin: auto; width: 180px; height: 180px; background: #fff; display: flex; justify-content: center; align-items: center; flex-direction: column;">
-                            <div style="width: 150px; height: 150px; background: #108ee9; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; color: white; text-align: center;">
-                                <div>
-                                    <div style="font-size: 24px; margin-bottom: 10px;">扫一扫</div>
-                                    <div style="font-size: 14px; line-height: 1.5;">
-                                        <div>*磊</div>
-                                        <div style="margin-top: 5px;">¥${price}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="margin-top: 5px; width: 120px;">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23108ee9' d='M15.4 6.1H5c-.5 0-1 .4-1 1v6c0 .5.4 1 1 1h10.5c.5 0 1-.4 1-1v-6c0-.6-.5-1-1.1-1zm-5.3 6.2c-1.4 0-2.6-1.2-2.6-2.6s1.2-2.6 2.6-2.6 2.6 1.2 2.6 2.6-1.2 2.6-2.6 2.6zm1.9-2.6c0 1-.8 1.9-1.9 1.9-1 0-1.9-.8-1.9-1.9 0-1 .8-1.9 1.9-1.9s1.9.9 1.9 1.9z'/%3E%3C/svg%3E" style="width: 20px; vertical-align: middle;">
-                                <span style="font-size: 12px; color: #888; vertical-align: middle;">支付宝</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
+            qrcodeDiv.innerHTML = alipayQRcodeHTML;
         });
         
         // 支付倒计时（15分钟）
