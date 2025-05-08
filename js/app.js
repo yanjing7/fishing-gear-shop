@@ -607,10 +607,17 @@ class ProductManager {
 
             // 检查图片URL是否有效
             let imageUrl = product.imageUrl;
-            if (!imageUrl || imageUrl.includes('${window.') || !imageUrl.startsWith('http')) {
+            // 为特定产品使用提供的图片
+            if (product.id === 'custom-hook-001') {
+                // 串钩产品使用本地图片
+                imageUrl = 'https://via.placeholder.com/400x300/4a7043/ffffff?text=程老板定制串钩';
+            } else if (!imageUrl || imageUrl.includes('${window.') || !imageUrl.startsWith('http')) {
                 // 使用占位图作为备用
                 imageUrl = `https://via.placeholder.com/400x300/e0e0e0/333333?text=${encodeURIComponent(product.title || product.name || '产品图片')}`;
             }
+
+            // 图片加载错误处理
+            const imgOnErrorHandler = "this.onerror=null; this.src='https://via.placeholder.com/400x300/4a7043/ffffff?text=" + encodeURIComponent(product.title || product.name || '产品图片') + "'";
 
             // 最小购买量提示
             const minimumOrderHtml = product.minimumOrder ? 
@@ -620,7 +627,7 @@ class ProductManager {
             return `
                 <div class="product-card" data-id="${product.id}">
                     <div class="product-image">
-                        <img src="${imageUrl}" alt="${product.title || product.name}" loading="lazy">
+                        <img src="${imageUrl}" alt="${product.title || product.name}" loading="lazy" onerror="${imgOnErrorHandler}">
                     </div>
                     <div class="product-info">
                         <h3 class="product-title">${product.title || product.name}</h3>
@@ -694,7 +701,12 @@ class ProductManager {
         
         // 确保图片URL是有效的
         let imageUrl = product.imageUrl;
-        if (!imageUrl || imageUrl.includes('${window.') || !imageUrl.startsWith('http')) {
+        
+        // 特殊处理串钩产品
+        if (product.id === 'custom-hook-001') {
+            // 串钩产品使用固定的占位图
+            imageUrl = 'https://via.placeholder.com/600x400/4a7043/ffffff?text=程老板定制串钩';
+        } else if (!imageUrl || imageUrl.includes('${window.') || !imageUrl.startsWith('http')) {
             // 使用占位图作为备用
             imageUrl = `https://via.placeholder.com/400x300/4a7043/ffffff?text=${encodeURIComponent(product.title || product.name || '产品图片')}`;
         }
@@ -702,6 +714,12 @@ class ProductManager {
         // 设置详情内容
         imageElement.src = imageUrl;
         imageElement.alt = product.title || product.name;
+        // 添加错误处理
+        imageElement.onerror = function() {
+            this.onerror = null;
+            this.src = `https://via.placeholder.com/400x300/4a7043/ffffff?text=${encodeURIComponent(product.title || product.name || '产品图片')}`;
+        };
+        
         titleElement.textContent = product.title || product.name;
         priceElement.innerHTML = `¥${product.price} <small><del>¥${product.originalPrice || (parseFloat(product.price) * 1.2).toFixed(2)}</del></small>`;
         
@@ -711,11 +729,34 @@ class ProductManager {
         
         // 添加产品介绍图
         if (product.detailImages && product.detailImages.length > 0) {
-            productContentHtml = `
-                <div class="product-detail-images">
-                    ${product.detailImages.map(img => `<img src="${img}" alt="${product.title}" class="detail-img">`).join('')}
-                </div>
-            `;
+            // 特殊处理串钩产品的详情图片
+            if (product.id === 'custom-hook-001') {
+                productContentHtml = `
+                    <div class="product-detail-images">
+                        <div class="product-features">
+                            <h4>产品特点</h4>
+                            <ul>
+                                <li>高品质材料，坚固耐用</li>
+                                <li>专业设计，性能卓越</li>
+                                <li>适合各种钓鱼场景</li>
+                                <li>性价比高，物超所值</li>
+                                <li>专业钓鱼串钩，适合黄辣丁、小鲶鱼等远河野钓</li>
+                                <li>售价7元/付，3付起卖</li>
+                            </ul>
+                        </div>
+                        <p style="color: #e53935; font-weight: bold; margin-top: 15px;">注意：此商品3付起卖，每付7元。</p>
+                        <img src="https://via.placeholder.com/600x400/4a7043/ffffff?text=程老板定制串钩实拍图" alt="${product.title}" class="detail-img" style="margin-top: 15px;">
+                    </div>
+                `;
+            } else {
+                productContentHtml = `
+                    <div class="product-detail-images">
+                        ${product.detailImages.map(img => {
+                            return `<img src="${img}" alt="${product.title}" class="detail-img" onerror="this.onerror=null; this.src='https://via.placeholder.com/600x400/4a7043/ffffff?text=${encodeURIComponent(product.title || '产品详情')}'">`
+                        }).join('')}
+                    </div>
+                `;
+            }
         } else {
             // 如果没有详情图，添加一些默认的详情HTML
             productContentHtml = `

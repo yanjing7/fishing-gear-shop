@@ -162,4 +162,110 @@ window.fallbackProductsJson = `[
         "category": "配件",
         "description": "防水设计，多层隔断，收纳鱼钩、铅坠、浮漂等小配件，野钓必备。"
     }
-]`; 
+]`;
+
+/**
+ * 程老板渔具网站 - 演示数据
+ * 当无法从抖音获取商品时使用的备用数据
+ */
+
+const DEMO_PRODUCTS = [
+    {
+        id: 'custom-hook-001',
+        title: '程老板定制串钩',
+        description: '专业钓鱼串钩，适合黄辣丁、小鲶鱼等远河野钓，高强度耐用，售价7元/付，3付起卖。',
+        price: '7',
+        originalPrice: '10',
+        category: '钓鱼配件',
+        sales: '128',
+        imageUrl: 'img/custom-hooks-1.jpg',
+        minimumOrder: 3,
+        detailImages: [
+            'img/custom-hooks-1.jpg',
+            'img/custom-hooks-2.jpg',
+            'img/custom-hooks-3.jpg'
+        ]
+    },
+    {
+        id: 'custom-rod-001',
+        title: '程老板碳素钓鱼竿',
+        description: '超轻碳素钓鱼竿，强韧耐用，适合各种野钓环境',
+        price: '158',
+        originalPrice: '198',
+        category: '钓鱼竿',
+        sales: '86',
+        imageUrl: 'https://via.placeholder.com/400x300/4a7043/ffffff?text=碳素钓鱼竿',
+        minimumOrder: 1
+    },
+    {
+        id: 'fishing-reel-001',
+        title: '纺车轮鱼线轮',
+        description: '高品质纺车轮，金属材质，耐磨抗腐蚀',
+        price: '120',
+        originalPrice: '150', 
+        category: '渔轮',
+        sales: '75',
+        imageUrl: 'https://via.placeholder.com/400x300/4a7043/ffffff?text=纺车轮鱼线轮',
+        minimumOrder: 1
+    },
+    {
+        id: 'fishing-line-001',
+        title: '高强度尼龙渔线',
+        description: '进口尼龙材质，拉力强，不易断',
+        price: '35',
+        originalPrice: '45',
+        category: '渔线',
+        sales: '132',
+        imageUrl: 'https://via.placeholder.com/400x300/4a7043/ffffff?text=高强度尼龙渔线',
+        minimumOrder: 1
+    },
+    {
+        id: 'fishing-lure-001',
+        title: '仿生软饵套装',
+        description: '多款仿生软饵，逼真外观，强力诱鱼',
+        price: '45',
+        originalPrice: '60',
+        category: '饵料',
+        sales: '98',
+        imageUrl: 'https://via.placeholder.com/400x300/4a7043/ffffff?text=仿生软饵套装',
+        minimumOrder: 1
+    },
+    {
+        id: 'fishing-suit-001',
+        title: '便携钓鱼套装',
+        description: '一套搞定所有渔具需求，适合新手和资深钓友',
+        price: '285',
+        originalPrice: '358',
+        category: '套装',
+        sales: '64',
+        imageUrl: 'https://via.placeholder.com/400x300/4a7043/ffffff?text=便携钓鱼套装',
+        minimumOrder: 1
+    },
+    {
+        id: 'fishing-hook-set-001',
+        title: '专业鱼钩套装',
+        description: '各种型号鱼钩组合，满足不同钓鱼需求',
+        price: '25',
+        originalPrice: '38',
+        category: '钓鱼配件',
+        sales: '145',
+        imageUrl: 'https://via.placeholder.com/400x300/4a7043/ffffff?text=专业鱼钩套装',
+        minimumOrder: 1
+    },
+    {
+        id: 'fishing-chair-001',
+        title: '便携折叠钓鱼椅',
+        description: '轻巧便携，坚固耐用，户外钓鱼必备',
+        price: '88',
+        originalPrice: '128',
+        category: '钓鱼装备',
+        sales: '56',
+        imageUrl: 'https://via.placeholder.com/400x300/4a7043/ffffff?text=便携折叠钓鱼椅',
+        minimumOrder: 1
+    }
+];
+
+// 导出演示数据
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { DEMO_PRODUCTS };
+} 
