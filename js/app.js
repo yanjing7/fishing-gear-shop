@@ -951,14 +951,18 @@ class ProductManager {
             if (confirm("您确认已完成支付吗？")) {
                 // 发送邮件确认
                 const email = customerEmail.value.trim();
+                
+                // 保存订单信息用于支付成功页面显示
+                const orderInformation = {
+                    orderId: orderId,
+                    productName: product.title || product.name,
+                    price: price,
+                    paymentMethod: document.querySelector('.payment-method .active').textContent.trim()
+                };
+                
                 if (email) {
                     try {
-                        this.sendOrderConfirmationEmail(email, {
-                            orderId: orderId,
-                            productName: product.title || product.name,
-                            price: price,
-                            paymentMethod: document.querySelector('.payment-method .active').textContent.trim()
-                        });
+                        this.sendOrderConfirmationEmail(email, orderInformation);
                     } catch (err) {
                         console.error("发送邮件出错:", err);
                         // 即使邮件发送失败也显示成功消息
@@ -973,7 +977,7 @@ class ProductManager {
                 // 关闭支付模态框
                 document.body.removeChild(modal);
                 document.head.removeChild(styleElement);
-                // 创建联系管理员页面
+                // 创建订单成功页面并传递订单信息
                 this.createContactAdminPage();
             }
         });
@@ -1085,26 +1089,180 @@ class ProductManager {
     
     // 创建联系管理员页面
     createContactAdminPage() {
+        // 如果没有传递订单信息，使用保存的上一次订单
+        let orderId = '订单号加载中...';
+        let productName = '商品信息加载中...';
+        let price = '0.00';
+        let paymentMethod = '支付方式加载中...';
+        
+        // 尝试从localStorage获取最近订单
+        try {
+            const pendingOrders = JSON.parse(localStorage.getItem('pendingEmailOrders') || '[]');
+            if (pendingOrders.length > 0) {
+                const latestOrder = pendingOrders[pendingOrders.length - 1];
+                orderId = latestOrder.orderId;
+                productName = latestOrder.productName;
+                price = latestOrder.price;
+                paymentMethod = latestOrder.paymentMethod;
+            }
+        } catch (e) {
+            console.error('获取订单信息失败', e);
+        }
+        
         const contactAdminHtml = `
         <!DOCTYPE html>
         <html lang="zh-CN">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>联系管理员</title>
+            <title>支付成功 - 程老板渔具</title>
             <style>
-                body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background: #f5f5f5; }
-                .container { max-width: 400px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-                .tips { color: #666; font-size: 14px; margin: 10px 0; }
+                body { 
+                    font-family: Arial, sans-serif; 
+                    text-align: center; 
+                    padding: 20px; 
+                    background: #f5f5f5; 
+                    color: #333;
+                    margin: 0;
+                }
+                .container { 
+                    max-width: 500px; 
+                    margin: 20px auto; 
+                    background: #fff; 
+                    padding: 30px; 
+                    border-radius: 10px; 
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                }
+                .success-icon {
+                    width: 80px;
+                    height: 80px;
+                    margin: 0 auto 20px;
+                    background: #4CAF50;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                .success-icon svg {
+                    width: 40px;
+                    height: 40px;
+                    fill: white;
+                }
+                h2 { 
+                    color: #4CAF50; 
+                    margin-bottom: 20px;
+                    font-size: 24px;
+                }
+                .order-details {
+                    background: #f9f9f9;
+                    padding: 15px;
+                    border-radius: 8px;
+                    margin: 20px 0;
+                    text-align: left;
+                    border: 1px solid #e0e0e0;
+                }
+                .order-details p {
+                    margin: 10px 0;
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .order-details p span:first-child {
+                    color: #666;
+                    font-weight: bold;
+                }
+                .order-details p span:last-child {
+                    color: #333;
+                }
+                .order-details .price {
+                    color: #e53935 !important;
+                    font-weight: bold;
+                    font-size: 18px;
+                }
+                .buttons {
+                    margin-top: 30px;
+                    display: flex;
+                    justify-content: center;
+                    gap: 15px;
+                }
+                .btn {
+                    display: inline-block;
+                    padding: 12px 20px;
+                    background: #1e88e5;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    font-size: 16px;
+                    cursor: pointer;
+                    text-decoration: none;
+                    transition: background 0.3s;
+                }
+                .btn:hover {
+                    background: #1976d2;
+                }
+                .btn-primary {
+                    background: #4CAF50;
+                }
+                .btn-primary:hover {
+                    background: #388E3C;
+                }
+                .tips { 
+                    color: #666; 
+                    font-size: 14px; 
+                    margin: 15px 0; 
+                    line-height: 1.6;
+                }
+                .contact-info {
+                    margin-top: 30px;
+                    background: #e8f5e9;
+                    padding: 15px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                }
+                .contact-info p {
+                    margin: 8px 0;
+                }
+                .footer {
+                    margin-top: 30px;
+                    padding-top: 20px;
+                    border-top: 1px solid #eee;
+                    color: #999;
+                    font-size: 12px;
+                }
             </style>
         </head>
         <body>
             <div class="container">
-                <h2>支付已提交</h2>
-                <p class="tips">感谢您的支付！请联系管理员核实订单。</p>
-                <p class="tips">管理员联系方式：<br>微信：admin-wechat-id<br>邮箱：admin@example.com</p>
-                <a href="index.html">返回支付页面</a>
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+                    </svg>
                 </div>
+                <h2>支付成功！</h2>
+                <p class="tips">您的订单已提交成功，我们将尽快为您处理。</p>
+                
+                <div class="order-details">
+                    <p><span>订单编号：</span> <span>${orderId}</span></p>
+                    <p><span>商品名称：</span> <span>${productName}</span></p>
+                    <p><span>支付金额：</span> <span class="price">¥${price}</span></p>
+                    <p><span>支付方式：</span> <span>${paymentMethod}</span></p>
+                    <p><span>订单时间：</span> <span>${new Date().toLocaleString('zh-CN')}</span></p>
+                </div>
+                
+                <div class="buttons">
+                    <a href="index.html" class="btn btn-primary">返回首页</a>
+                    <a href="#" class="btn" onclick="window.print(); return false;">打印订单</a>
+                </div>
+                
+                <div class="contact-info">
+                    <p><strong>如有任何问题，请联系客服：</strong></p>
+                    <p>微信：chenglaoban_cs</p>
+                    <p>电话：188-8888-8888</p>
+                </div>
+                
+                <div class="footer">
+                    &copy; 2023 程老板渔具 版权所有
+                </div>
+            </div>
         </body>
         </html>
         `;
