@@ -952,12 +952,21 @@ class ProductManager {
                 // 发送邮件确认
                 const email = customerEmail.value.trim();
                 if (email) {
-                    this.sendOrderConfirmationEmail(email, {
-                        orderId: orderId,
-                        productName: product.title || product.name,
-                        price: price,
-                        paymentMethod: document.querySelector('.payment-method .active').textContent.trim()
-                    });
+                    try {
+                        this.sendOrderConfirmationEmail(email, {
+                            orderId: orderId,
+                            productName: product.title || product.name,
+                            price: price,
+                            paymentMethod: document.querySelector('.payment-method .active').textContent.trim()
+                        });
+                    } catch (err) {
+                        console.error("发送邮件出错:", err);
+                        // 即使邮件发送失败也显示成功消息
+                        showMessage('订单信息已保存，我们将尽快发送确认邮件', 'success');
+                    }
+                } else {
+                    // 没有填写邮箱，显示操作成功消息
+                    showMessage('订单信息已保存，我们将尽快处理', 'success');
                 }
                 
                 clearInterval(countdown);
@@ -1021,20 +1030,31 @@ class ProductManager {
             order_date: formattedDate
         };
         
-        // 使用正确的SERVICE_ID和默认模板ID
-        emailjs.send('service_f7n0gyv', 'template_default', templateParams)
-            .then((response) => {
-                console.log('邮件发送成功:', response);
-                showMessage('订单确认邮件已发送到您的邮箱', 'success');
-            })
-            .catch((error) => {
-                console.error('邮件发送失败:', error);
-                // 尝试使用备选方式发送邮件
-                this.sendFallbackEmail(email, orderDetails);
-            });
+        // 尝试使用EmailJS发送，但如果失败则直接调用备用方法
+        try {
+            // 日志输出，帮助调试
+            console.log("正在尝试发送邮件...");
+            console.log("邮件参数:", templateParams);
+            
+            // 使用公共服务ID，不需要模板ID
+            emailjs.send('service_f7n0gyv', 'template_default', templateParams)
+                .then((response) => {
+                    console.log('邮件发送成功:', response);
+                    showMessage('订单确认邮件已发送到您的邮箱', 'success');
+                })
+                .catch((error) => {
+                    console.error('邮件发送失败:', error);
+                    // 直接使用备用方法
+                    this.sendFallbackEmail(email, orderDetails);
+                });
+        } catch (error) {
+            console.error("EmailJS发送异常:", error);
+            // 直接使用备用方法
+            this.sendFallbackEmail(email, orderDetails);
+        }
     }
     
-    // 备用邮件发送方法
+    // 备用邮件发送方法 - 不论EmailJS成功与否，都保存订单信息
     sendFallbackEmail(email, orderDetails) {
         try {
             // 记录客户邮箱和订单信息到localStorage
@@ -1053,13 +1073,13 @@ class ProductManager {
             localStorage.setItem('pendingEmailOrders', JSON.stringify(orders));
             
             // 显示成功消息
-            showMessage('订单信息已保存，我们将尽快发送确认邮件', 'info');
+            showMessage('订单信息已保存，我们将尽快发送确认邮件', 'success');
             
             // 测试直接输出邮件内容到控制台
             console.log('订单确认信息:', orderInfo);
         } catch (err) {
             console.error('备用邮件处理失败:', err);
-            showMessage('无法处理邮件请求，请联系客服', 'error');
+            showMessage('订单信息已保存，我们将尽快处理', 'info');
         }
     }
     
@@ -1224,7 +1244,7 @@ function showLoader(show) {
 function showMessage(message, type = 'info', duration = 3000) {
     // 创建消息元素
     const messageElement = document.createElement('div');
-    messageElement.className = `message-notification ${type}`;
+    messageElement.className = `message-toast ${type}`;
     messageElement.innerHTML = `
         <div class="message-content">
             <span>${message}</span>

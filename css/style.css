@@ -2606,4 +2606,47 @@ h2::after {
     color: #4a7043;
     position: absolute;
     left: 0;
+}
+
+/* 消息提示 */
+.message-toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    text-align: center;
+    font-size: 16px;
+    min-width: 250px;
+    max-width: 80%;
+}
+
+.message-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(10px);
+}
+
+/* 不同类型的消息提示 */
+.message-toast.error {
+    background-color: #f44336;
+}
+
+.message-toast.success {
+    background-color: #4CAF50;
+}
+
+.message-toast.info {
+    background-color: #2196F3;
+}
+
+.message-toast.warning {
+    background-color: #ff9800;
 } 

@@ -224,6 +224,10 @@
             z-index: 1005;
             opacity: 0;
             transition: transform 0.3s, opacity 0.3s;
+            font-size: 16px;
+            text-align: center;
+            max-width: 90%;
+            min-width: 300px;
         }
         .message-toast.active {
             transform: translateX(-50%) translateY(0);
@@ -231,6 +235,15 @@
         }
         .message-toast.error {
             background: #e63946;
+        }
+        .message-toast.success {
+            background: #4caf50;
+        }
+        .message-toast.info {
+            background: #2196F3;
+        }
+        .message-toast.warning {
+            background: #ff9800;
         }
         .original-price {
             text-decoration: line-through;
