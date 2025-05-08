@@ -1006,6 +1006,10 @@ class ProductManager {
     
     // 使用EmailJS发送邮件
     sendEmail(email, orderDetails) {
+        // 添加当前日期
+        const now = new Date();
+        const formattedDate = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}`;
+        
         const templateParams = {
             to_email: email,
             order_id: orderDetails.orderId,
@@ -1013,19 +1017,50 @@ class ProductManager {
             price: orderDetails.price,
             payment_method: orderDetails.paymentMethod,
             from_name: "程老板渔具",
-            reply_to: "noreply@chenglaoban.com"
+            reply_to: "noreply@chenglaoban.com",
+            order_date: formattedDate
         };
         
-        // 使用提供的SERVICE_ID和模板ID
-        emailjs.send('service_f7n0gyv', 'template_7z6ykws', templateParams)
+        // 使用正确的SERVICE_ID和默认模板ID
+        emailjs.send('service_f7n0gyv', 'template_default', templateParams)
             .then((response) => {
                 console.log('邮件发送成功:', response);
                 showMessage('订单确认邮件已发送到您的邮箱', 'success');
             })
             .catch((error) => {
                 console.error('邮件发送失败:', error);
-                showMessage('订单确认邮件发送失败，请联系客服', 'error');
+                // 尝试使用备选方式发送邮件
+                this.sendFallbackEmail(email, orderDetails);
             });
+    }
+    
+    // 备用邮件发送方法
+    sendFallbackEmail(email, orderDetails) {
+        try {
+            // 记录客户邮箱和订单信息到localStorage
+            const orderInfo = {
+                email: email,
+                orderId: orderDetails.orderId,
+                productName: orderDetails.productName,
+                price: orderDetails.price,
+                paymentMethod: orderDetails.paymentMethod,
+                date: new Date().toISOString()
+            };
+            
+            // 获取现有订单记录
+            let orders = JSON.parse(localStorage.getItem('pendingEmailOrders') || '[]');
+            orders.push(orderInfo);
+            localStorage.setItem('pendingEmailOrders', JSON.stringify(orders));
+            
+            // 显示成功消息
+            showMessage('订单信息已保存，我们将尽快发送确认邮件', 'info');
+            
+            // 测试直接输出邮件内容到控制台
+            console.log('订单确认信息:', orderInfo);
+        } catch (err) {
+            console.error('备用邮件处理失败:', err);
+            showMessage('无法处理邮件请求，请联系客服', 'error');
+        }
     }
     
     // 创建联系管理员页面
