@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>订单确认 - 程老板渔具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #1e88e5;
+        }
+        .logo {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            color: #1e88e5;
+            margin: 0;
+            font-size: 24px;
+        }
+        .order-details {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .order-details p {
+            margin: 5px 0;
+        }
+        .price {
+            font-weight: bold;
+            color: #e53935;
+            font-size: 18px;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #777;
+            text-align: center;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+        }
+        .button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .contact-info {
+            margin-top: 20px;
+            background-color: #e8f5e9;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="https://yanjing7.github.io/fishing-gear-shop/img/logo.png" alt="程老板渔具" class="logo">
+        <h1>程老板渔具 - 订单确认</h1>
+    </div>
+    
+    <p>尊敬的客户，您好！</p>
+    
+    <p>感谢您在程老板渔具小店购物。您的订单已成功提交并确认支付。以下是您的订单详情：</p>
+    
+    <div class="order-details">
+        <p><strong>订单号：</strong> {{order_id}}</p>
+        <p><strong>商品名称：</strong> {{product_name}}</p>
+        <p><strong>支付金额：</strong> <span class="price">¥{{price}}</span></p>
+        <p><strong>支付方式：</strong> {{payment_method}}</p>
+        <p><strong>订单日期：</strong> {{order_date}}</p>
+    </div>
+    
+    <p>我们将尽快为您安排发货。您可以随时登录网站或联系客服查询订单状态。</p>
+    
+    <div class="contact-info">
+        <p><strong>如有任何问题，请联系我们：</strong></p>
+        <p>电话：+86 123-4567-8910</p>
+        <p>微信：chenglaoban</p>
+        <p>邮箱：service@chenglaoban.com</p>
+    </div>
+    
+    <p>感谢您的支持与信任！</p>
+    
+    <a href="https://yanjing7.github.io/fishing-gear-shop/" class="button">访问我们的网站</a>
+    
+    <div class="footer">
+        <p>此邮件为系统自动发送，请勿直接回复。</p>
+        <p>&copy; 2023 程老板渔具 版权所有</p>
+    </div>
+</body>
+</html> 

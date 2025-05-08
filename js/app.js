@@ -793,6 +793,12 @@ class ProductManager {
                             <p>付款金额：<span id="itemPrice" class="price">¥${price}</span></p>
                             <p>订单号：<span id="orderId">${orderId}</span></p>
                         </div>
+                        
+                        <div class="customer-email-container">
+                            <label for="customer-email">您的邮箱 (接收订单信息):</label>
+                            <input type="email" id="customer-email" placeholder="请输入您的邮箱" class="customer-email-input">
+                        </div>
+                        
                         <p class="timer">支付倒计时：<span id="timer">15:00</span></p>
 
                         <div class="payment-method">
@@ -841,6 +847,9 @@ class ProductManager {
             .payment-page-modal .price { font-size: 28px; font-weight: bold; color: #e53935; margin: 10px 0; }
             .payment-page-modal .info-box { background: #f5f5f5; padding: 10px; border-radius: 5px; margin: 10px 0; }
             .payment-page-modal .info-box p { margin: 5px 0; color: #555; font-size: 14px; }
+            .payment-page-modal .customer-email-container { margin: 15px 0; }
+            .payment-page-modal .customer-email-container label { display: block; margin-bottom: 5px; color: #555; font-size: 14px; }
+            .payment-page-modal .customer-email-input { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
             .payment-page-modal .payment-method { display: flex; justify-content: center; gap: 10px; margin: 15px 0; }
             .payment-page-modal .payment-method button { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background 0.3s; }
             .payment-page-modal .payment-method .active { background: #1e88e5; color: #fff; }
@@ -868,6 +877,7 @@ class ProductManager {
         const qrcodeDiv = document.getElementById('qrcode');
         const confirmBtn = document.getElementById('confirmPaymentBtn');
         const timerSpan = document.getElementById('timer');
+        const customerEmail = document.getElementById('customer-email');
         
         // 创建支付宝支付界面HTML
         const alipayQRcodeHTML = `
@@ -939,6 +949,17 @@ class ProductManager {
         // 确认支付
         confirmBtn.addEventListener('click', () => {
             if (confirm("您确认已完成支付吗？")) {
+                // 发送邮件确认
+                const email = customerEmail.value.trim();
+                if (email) {
+                    this.sendOrderConfirmationEmail(email, {
+                        orderId: orderId,
+                        productName: product.title || product.name,
+                        price: price,
+                        paymentMethod: document.querySelector('.payment-method .active').textContent.trim()
+                    });
+                }
+                
                 clearInterval(countdown);
                 // 关闭支付模态框
                 document.body.removeChild(modal);
@@ -963,6 +984,48 @@ class ProductManager {
                 document.head.removeChild(styleElement);
             }
         });
+    }
+    
+    // 发送订单确认邮件
+    sendOrderConfirmationEmail(email, orderDetails) {
+        // 检查是否已加载EmailJS
+        if (typeof emailjs === 'undefined') {
+            // 动态加载EmailJS
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+            script.async = true;
+            script.onload = () => {
+                // EmailJS已经在index.html中初始化了
+                this.sendEmail(email, orderDetails);
+            };
+            document.head.appendChild(script);
+        } else {
+            this.sendEmail(email, orderDetails);
+        }
+    }
+    
+    // 使用EmailJS发送邮件
+    sendEmail(email, orderDetails) {
+        const templateParams = {
+            to_email: email,
+            order_id: orderDetails.orderId,
+            product_name: orderDetails.productName,
+            price: orderDetails.price,
+            payment_method: orderDetails.paymentMethod,
+            from_name: "程老板渔具",
+            reply_to: "noreply@chenglaoban.com"
+        };
+        
+        // 使用提供的SERVICE_ID和模板ID
+        emailjs.send('service_f7n0gyv', 'template_7z6ykws', templateParams)
+            .then((response) => {
+                console.log('邮件发送成功:', response);
+                showMessage('订单确认邮件已发送到您的邮箱', 'success');
+            })
+            .catch((error) => {
+                console.error('邮件发送失败:', error);
+                showMessage('订单确认邮件发送失败，请联系客服', 'error');
+            });
     }
     
     // 创建联系管理员页面
